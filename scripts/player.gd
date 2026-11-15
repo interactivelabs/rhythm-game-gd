@@ -32,6 +32,9 @@ func _physics_process(_delta: float) -> void:
 	elif Input.is_action_just_pressed("move_down"):
 		_move_lane(1)
 
+	if Input.is_action_just_pressed("move_right"):
+		GameManager.start_run()
+
 	var next_state := _get_next_state()
 	if next_state != state:
 		change_state(next_state)
@@ -62,11 +65,12 @@ func _is_switching_lane() -> bool:
 
 
 # Decides which state the player should be in from current input.
-# Attack takes priority over moving; idle is the fallback.
+# Attack takes priority over moving; once the run has started the player
+# keeps running for good; idle is only used before the start.
 func _get_next_state() -> State:
 	if Input.is_action_pressed("attack"):
 		return State.ATTACK
-	if Input.is_action_pressed("move_right") or _is_switching_lane():
+	if GameManager.is_running or _is_switching_lane():
 		return State.MOVING
 	return State.IDLE
 

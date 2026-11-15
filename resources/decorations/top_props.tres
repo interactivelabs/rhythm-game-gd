@@ -1,0 +1,76 @@
+[gd_resource type="Resource" script_class="DecorationBand" format=3]
+
+[ext_resource type="Script" path="res://scripts/decoration_band.gd" id="band"]
+[ext_resource type="Script" path="res://scripts/decoration_entry.gd" id="entry"]
+[ext_resource type="Texture2D" path="res://assets/TerrainDecorations/Bushes/Bushe1.png" id="tex0"]
+[ext_resource type="Texture2D" path="res://assets/TerrainDecorations/Bushes/Bushe2.png" id="tex1"]
+[ext_resource type="Texture2D" path="res://assets/TerrainDecorations/Bushes/Bushe3.png" id="tex2"]
+[ext_resource type="Texture2D" path="res://assets/TerrainDecorations/Bushes/Bushe4.png" id="tex3"]
+[ext_resource type="Texture2D" path="res://assets/TerrainDecorations/Rocks/Rock1.png" id="tex4"]
+[ext_resource type="Texture2D" path="res://assets/TerrainDecorations/Rocks/Rock2.png" id="tex5"]
+[ext_resource type="Texture2D" path="res://assets/TerrainDecorations/Rocks/Rock3.png" id="tex6"]
+[ext_resource type="Texture2D" path="res://assets/TerrainDecorations/Rocks/Rock4.png" id="tex7"]
+
+[sub_resource type="Resource" id="e0"]
+script = ExtResource("entry")
+texture = ExtResource("tex0")
+hframes = 8
+weight = 1.0
+allow_flip = true
+
+[sub_resource type="Resource" id="e1"]
+script = ExtResource("entry")
+texture = ExtResource("tex1")
+hframes = 8
+weight = 1.0
+allow_flip = true
+
+[sub_resource type="Resource" id="e2"]
+script = ExtResource("entry")
+texture = ExtResource("tex2")
+hframes = 8
+weight = 1.0
+allow_flip = true
+
+[sub_resource type="Resource" id="e3"]
+script = ExtResource("entry")
+texture = ExtResource("tex3")
+hframes = 8
+weight = 1.0
+allow_flip = true
+
+[sub_resource type="Resource" id="e4"]
+script = ExtResource("entry")
+texture = ExtResource("tex4")
+hframes = 1
+weight = 1.0
+allow_flip = true
+
+[sub_resource type="Resource" id="e5"]
+script = ExtResource("entry")
+texture = ExtResource("tex5")
+hframes = 1
+weight = 1.0
+allow_flip = true
+
+[sub_resource type="Resource" id="e6"]
+script = ExtResource("entry")
+texture = ExtResource("tex6")
+hframes = 1
+weight = 1.0
+allow_flip = true
+
+[sub_resource type="Resource" id="e7"]
+script = ExtResource("entry")
+texture = ExtResource("tex7")
+hframes = 1
+weight = 1.0
+allow_flip = true
+
+[resource]
+script = ExtResource("band")
+min_row = 0
+max_row = 1
+min_gap = 16.0
+max_gap = 320.0
+entries = Array[ExtResource("entry")]([SubResource("e0"), SubResource("e1"), SubResource("e2"), SubResource("e3"), SubResource("e4"), SubResource("e5"), SubResource("e6"), SubResource("e7")])
