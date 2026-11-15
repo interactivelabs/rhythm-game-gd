@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" path="res://scripts/enemy_data.gd" id="1"]
+[ext_resource type="SpriteFrames" path="res://resources/enemies/frames/bear_frames.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Bear"
+damage = 3
+sprite_frames = ExtResource("2")
+collision_radius = 52.0
