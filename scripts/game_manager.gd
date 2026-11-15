@@ -4,6 +4,10 @@ extends Node
 signal scroll_speed_changed(speed: float)
 signal score_changed(score: int)
 signal health_changed(health: int, max_health: int)
+## Emitted once per whole second of run time (not every frame).
+signal run_seconds_changed(seconds: int)
+## Emitted when health reaches 0: the world stops and the run is over.
+signal run_ended
 
 ## Tilemap rows of the canyon the player can move between (top to bottom).
 const LANE_ROWS: Array[int] = [3, 4, 5]
@@ -26,21 +30,50 @@ var scroll_speed: float = 0.0:
 			return
 		scroll_speed = value
 		scroll_speed_changed.emit(scroll_speed)
-## True once the player has started the run (pressed right).
+## Difficulty knob: multiplies every speed increase (e.g. the speed_gain of
+## collected pickups). 1 = normal, 2 = speed ramps up twice as fast, 0 = the
+## world never speeds up. Exported so it shows in the Remote inspector while
+## testing.
+@export_range(0.0, 10.0, 0.05, "or_greater") var speed_scaling: float = 2.0
+## True once the player has started the run (pressed right), until it ends.
 var is_running := false
+## True once the run has ended (health reached 0). A new run needs a restart.
+var is_over := false
 ## Points from collected gold.
 var score := 0
 var health := START_HEALTH
+## Seconds since the run started.
+var run_time := 0.0
 ## Global y position of each lane's centre, filled by register_lanes().
 var lane_y: Array[float] = []
 
 
+func _process(delta: float) -> void:
+	if not is_running:
+		return
+	var before := int(run_time)
+	run_time += delta
+	var now := int(run_time)
+	if now != before:
+		run_seconds_changed.emit(now)
+
+
 ## Starts the run: the world begins scrolling. Does nothing if already running.
 func start_run() -> void:
-	if is_running:
+	if is_running or is_over:
 		return
 	is_running = true
 	scroll_speed = BASE_SCROLL_SPEED
+
+
+## Ends the run: the world stops scrolling and the run timer freezes.
+func end_run() -> void:
+	if not is_running:
+		return
+	is_running = false
+	is_over = true
+	scroll_speed = 0.0
+	run_ended.emit()
 
 
 func add_score(amount: int) -> void:
@@ -57,12 +90,22 @@ func change_health(amount: int) -> void:
 		return
 	health = new_health
 	health_changed.emit(health, MAX_HEALTH)
+	if health == 0:
+		end_run()
 
 
 ## Applies a collected pickup's effects.
 func collect(pickup: PickupData) -> void:
 	add_score(pickup.score)
 	change_health(pickup.heal)
+	add_speed(pickup.speed_gain)
+
+
+## Speeds the world up by amount px/s, scaled by speed_scaling. Only while running.
+func add_speed(amount: float) -> void:
+	if not is_running or amount == 0.0:
+		return
+	scroll_speed += amount * speed_scaling
 
 
 ## Computes lane positions from the given tilemap layer.

@@ -1,0 +1,67 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/health_bar.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/UIElements/Bars/BigBar_Base.png" id="2_base"]
+[ext_resource type="Texture2D" path="res://assets/UIElements/Bars/BigBar_Fill.png" id="3_fill"]
+
+[sub_resource type="AtlasTexture" id="left_cap"]
+atlas = ExtResource("2_base")
+region = Rect2(40, 9, 24, 51)
+
+[sub_resource type="AtlasTexture" id="middle"]
+atlas = ExtResource("2_base")
+region = Rect2(128, 9, 64, 51)
+
+[sub_resource type="AtlasTexture" id="right_cap"]
+atlas = ExtResource("2_base")
+region = Rect2(256, 9, 24, 51)
+
+[sub_resource type="AtlasTexture" id="fill"]
+atlas = ExtResource("3_fill")
+region = Rect2(0, 20, 64, 24)
+
+[node name="HealthBar" type="Control"]
+custom_minimum_size = Vector2(240, 51)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 240.0
+offset_bottom = 51.0
+script = ExtResource("1_script")
+
+[node name="Frame" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="LeftCap" type="TextureRect" parent="Frame"]
+layout_mode = 2
+texture = SubResource("left_cap")
+
+[node name="Middle" type="TextureRect" parent="Frame"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = SubResource("middle")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="RightCap" type="TextureRect" parent="Frame"]
+layout_mode = 2
+texture = SubResource("right_cap")
+
+[node name="Fill" type="TextureProgressBar" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 11.0
+offset_top = 11.0
+offset_right = -12.0
+offset_bottom = 35.0
+grow_horizontal = 2
+max_value = 100.0
+value = 50.0
+nine_patch_stretch = true
+texture_progress = SubResource("fill")

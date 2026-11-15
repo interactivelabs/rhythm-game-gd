@@ -4,39 +4,48 @@
 [ext_resource type="TileSet" uid="uid://doirowrko2sr5" path="res://resources/tilesets/terrain.tres" id="2_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://1h4qofcn4mpn" path="res://scenes/player.tscn" id="2_sugp2"]
 [ext_resource type="Script" uid="uid://kvarx0pfxrwi" path="res://scripts/decoration_spawner.gd" id="3_deco"]
-[ext_resource type="Script" path="res://scripts/world_scroll_parallax.gd" id="7_scroll"]
-[ext_resource type="Script" path="res://scripts/pickup_spawner.gd" id="8_pick"]
-[ext_resource type="PackedScene" path="res://scenes/pickup.tscn" id="10_pscene"]
-[ext_resource type="Resource" path="res://resources/pickups/gold_1.tres" id="9_gold_1"]
-[ext_resource type="Resource" path="res://resources/pickups/gold_2.tres" id="9_gold_2"]
-[ext_resource type="Resource" path="res://resources/pickups/gold_3.tres" id="9_gold_3"]
-[ext_resource type="Resource" path="res://resources/pickups/gold_4.tres" id="9_gold_4"]
-[ext_resource type="Resource" path="res://resources/pickups/gold_5.tres" id="9_gold_5"]
-[ext_resource type="Resource" path="res://resources/pickups/gold_6.tres" id="9_gold_6"]
-[ext_resource type="Resource" path="res://resources/pickups/meat.tres" id="9_meat"]
 [ext_resource type="Script" uid="uid://b88dxxfp466ig" path="res://scripts/decoration_band.gd" id="4_tipki"]
 [ext_resource type="Resource" uid="uid://dyjvig4c8a2yf" path="res://resources/decorations/top_props.tres" id="4_top"]
 [ext_resource type="Resource" uid="uid://pcangtj33w24" path="res://resources/decorations/bottom_props.tres" id="5_bot"]
 [ext_resource type="Resource" uid="uid://bjruacs2ld1nb" path="res://resources/decorations/bottom_buildings.tres" id="6_bld"]
+[ext_resource type="Script" uid="uid://cft6witr1ncgq" path="res://scripts/world_scroll_parallax.gd" id="7_scroll"]
+[ext_resource type="Script" uid="uid://bbofnv3cnfrax" path="res://scripts/pickup_data.gd" id="8_0ld40"]
+[ext_resource type="Script" path="res://scripts/pickup_pool.gd" id="8_pick"]
+[ext_resource type="PackedScene" path="res://scenes/pickup.tscn" id="12_pickup_scene"]
+[ext_resource type="Script" path="res://scripts/enemy_pool.gd" id="13_enemy_pool"]
+[ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="14_enemy_scene"]
+[ext_resource type="Script" path="res://scripts/enemy_data.gd" id="15_enemy_data"]
+[ext_resource type="Resource" path="res://resources/enemies/snake.tres" id="16_snake"]
+[ext_resource type="Resource" path="res://resources/enemies/thief.tres" id="16_thief"]
+[ext_resource type="Resource" path="res://resources/enemies/bear.tres" id="16_bear"]
+[ext_resource type="Script" path="res://scripts/lane_director.gd" id="17_director"]
+[ext_resource type="Resource" uid="uid://cu1pkltu175n7" path="res://resources/pickups/gold_1.tres" id="9_gold_1"]
+[ext_resource type="Resource" uid="uid://3kol4fxn1rpn" path="res://resources/pickups/gold_2.tres" id="9_gold_2"]
+[ext_resource type="Resource" uid="uid://bni7uif0sqld7" path="res://resources/pickups/gold_3.tres" id="9_gold_3"]
+[ext_resource type="Resource" uid="uid://shvt5chp5m2j" path="res://resources/pickups/gold_4.tres" id="9_gold_4"]
+[ext_resource type="Resource" uid="uid://bnrp1a6dck8r2" path="res://resources/pickups/gold_5.tres" id="9_gold_5"]
+[ext_resource type="Resource" uid="uid://w6yl1p0jh6lb" path="res://resources/pickups/gold_6.tres" id="9_gold_6"]
+[ext_resource type="Resource" path="res://resources/pickups/meat.tres" id="9_meat"]
+[ext_resource type="PackedScene" uid="uid://cli1v0jspfsiw" path="res://scenes/ui/hud.tscn" id="11_hud"]
 
 [node name="main" type="Node2D" unique_id=277463119]
 script = ExtResource("1_sugp2")
 
-[node name="TerrainGround" type="Parallax2D" parent="."]
-script = ExtResource("7_scroll")
+[node name="TerrainGround" type="Parallax2D" parent="." unique_id=524623698]
 repeat_size = Vector2(1152, 0)
 repeat_times = 3
 ignore_camera_scroll = true
+script = ExtResource("7_scroll")
 
 [node name="Ground" type="TileMapLayer" parent="TerrainGround" unique_id=246976136]
 tile_map_data = PackedByteArray("AAABAAQAAAABAAEAAAACAAQAAAABAAEAAAADAAQAAAABAAEAAAAEAAUAAAABAAEAAAAFAAUAAAABAAEAAAAGAAUAAAABAAEAAAAGAAQAAAABAAEAAAAHAAQAAAABAAEAAAAHAAMAAAABAAEAAAAGAAMAAAABAAEAAAAFAAMAAAABAAEAAAAEAAMAAAABAAEAAAAEAAQAAAABAAEAAAAFAAQAAAABAAEAAAADAAMAAAABAAEAAAADAAIAAAABAAAAAAACAAIAAAABAAAAAAACAAMAAAABAAEAAAABAAMAAAABAAEAAAAGAAIAAAABAAAAAAAEAAIAAAABAAAAAAAFAAIAAAABAAAAAAAHAAIAAAABAAAAAAAIAAIAAAABAAAAAAAIAAMAAAABAAEAAAAIAAQAAAABAAEAAAADAAUAAAABAAEAAAACAAUAAAABAAEAAAABAAIAAAABAAAAAAABAAUAAAABAAEAAAAHAAUAAAABAAEAAAAIAAUAAAABAAEAAAAJAAUAAAABAAEAAAAKAAUAAAABAAEAAAALAAUAAAABAAEAAAAMAAUAAAABAAEAAAANAAUAAAABAAEAAAAOAAQAAAABAAEAAAAPAAQAAAABAAEAAAAPAAUAAAABAAEAAAAOAAUAAAABAAEAAAAQAAUAAAABAAEAAAARAAUAAAABAAEAAAARAAQAAAABAAEAAAAQAAQAAAABAAEAAAANAAQAAAABAAEAAAAMAAQAAAABAAEAAAALAAQAAAABAAEAAAAKAAQAAAABAAEAAAAJAAQAAAABAAEAAAAJAAMAAAABAAEAAAAKAAMAAAABAAEAAAALAAMAAAABAAEAAAAMAAMAAAABAAEAAAANAAMAAAABAAEAAAAOAAMAAAABAAEAAAAPAAMAAAABAAEAAAAQAAMAAAABAAEAAAARAAIAAAABAAAAAAARAAMAAAABAAEAAAAQAAIAAAABAAAAAAAPAAIAAAABAAAAAAAOAAIAAAABAAAAAAANAAIAAAABAAAAAAAMAAIAAAABAAAAAAALAAIAAAABAAAAAAAKAAIAAAABAAAAAAAJAAIAAAABAAAAAAABAAYAAAABAAEAAAABAAcAAAABAAIAAAACAAcAAAABAAIAAAADAAcAAAABAAIAAAAEAAcAAAABAAIAAAAFAAcAAAABAAIAAAAGAAcAAAABAAIAAAAHAAcAAAABAAIAAAAJAAcAAAABAAIAAAAIAAcAAAABAAIAAAAKAAcAAAABAAIAAAAOAAcAAAABAAIAAAAPAAcAAAABAAIAAAARAAcAAAABAAIAAAAQAAcAAAABAAIAAAANAAcAAAABAAIAAAAMAAcAAAABAAIAAAALAAcAAAABAAIAAAACAAYAAAABAAEAAAADAAYAAAABAAEAAAAEAAYAAAABAAEAAAAFAAYAAAABAAEAAAAGAAYAAAABAAEAAAAHAAYAAAABAAEAAAAIAAYAAAABAAEAAAAJAAYAAAABAAEAAAAKAAYAAAABAAEAAAALAAYAAAABAAEAAAAMAAYAAAABAAEAAAANAAYAAAABAAEAAAAOAAYAAAABAAEAAAAPAAYAAAABAAEAAAAQAAYAAAABAAEAAAARAAYAAAABAAEAAAAAAAIAAAABAAAAAAAAAAMAAAABAAEAAAAAAAQAAAABAAEAAAAAAAUAAAABAAEAAAAAAAYAAAABAAEAAAAAAAcAAAABAAIAAAAAAAoACgAAAAAAAAABAAoACgAAAAAAAAACAAoACgAAAAAAAAADAAoACgAAAAAAAAAEAAoACgAAAAAAAAAFAAoACgAAAAAAAAAGAAoACgAAAAAAAAAHAAoACgAAAAAAAAAIAAoACgAAAAAAAAAJAAoACgAAAAAAAAAKAAoACgAAAAAAAAALAAoACgAAAAAAAAAMAAoACgAAAAAAAAANAAoACgAAAAAAAAAOAAoACgAAAAAAAAAPAAoACgAAAAAAAAAQAAoACgAAAAAAAAARAAoACgAAAAAAAAAAAAkACgAAAAAAAAABAAkACgAAAAAAAAACAAkACgAAAAAAAAADAAkACgAAAAAAAAAEAAkACgAAAAAAAAAFAAkACgAAAAAAAAAGAAkACgAAAAAAAAAHAAkACgAAAAAAAAAIAAkACgAAAAAAAAAJAAkACgAAAAAAAAAKAAkACgAAAAAAAAALAAkACgAAAAAAAAAMAAkACgAAAAAAAAANAAkACgAAAAAAAAAOAAkACgAAAAAAAAAPAAkACgAAAAAAAAAQAAkACgAAAAAAAAARAAkACgAAAAAAAAA=")
 tile_set = ExtResource("2_0wfyh")
 
-[node name="TerrainTop" type="Parallax2D" parent="."]
-script = ExtResource("7_scroll")
+[node name="TerrainTop" type="Parallax2D" parent="." unique_id=1122380320]
 repeat_size = Vector2(1152, 0)
 repeat_times = 3
 ignore_camera_scroll = true
+script = ExtResource("7_scroll")
 
 [node name="ElevatedTop" type="TileMapLayer" parent="TerrainTop" unique_id=1720564042]
 tile_map_data = PackedByteArray("AAAAAAEAAAAGAAIAAAAAAAIAAAAGAAQAAAABAAEAAAAGAAIAAAABAAIAAAAGAAQAAAACAAEAAAAGAAIAAAACAAIAAAAGAAQAAAADAAEAAAAGAAIAAAADAAIAAAAGAAQAAAAEAAEAAAAGAAIAAAAEAAIAAAAGAAQAAAAFAAEAAAAGAAIAAAAFAAIAAAAGAAQAAAAGAAEAAAAGAAIAAAAGAAIAAAAGAAQAAAAHAAEAAAAGAAIAAAAHAAIAAAAGAAQAAAAIAAEAAAAGAAIAAAAIAAIAAAAGAAQAAAAJAAEAAAAGAAIAAAAJAAIAAAAGAAQAAAAKAAEAAAAGAAIAAAAKAAIAAAAGAAQAAAALAAEAAAAGAAIAAAALAAIAAAAGAAQAAAAMAAEAAAAGAAIAAAAMAAIAAAAGAAQAAAANAAEAAAAGAAIAAAANAAIAAAAGAAQAAAAOAAEAAAAGAAIAAAAOAAIAAAAGAAQAAAAPAAEAAAAGAAIAAAAPAAIAAAAGAAQAAAAQAAEAAAAGAAIAAAAQAAIAAAAGAAQAAAARAAEAAAAGAAIAAAARAAIAAAAGAAQAAAAAAAAAAAAGAAEAAAABAAAAAAAGAAEAAAACAAAAAAAGAAEAAAADAAAAAAAGAAEAAAAFAAAAAAAGAAEAAAAEAAAAAAAGAAEAAAAGAAAAAAAGAAEAAAAHAAAAAAAGAAEAAAAIAAAAAAAGAAEAAAAJAAAAAAAGAAEAAAAKAAAAAAAGAAEAAAALAAAAAAAGAAEAAAAMAAAAAAAGAAEAAAANAAAAAAAGAAEAAAAOAAAAAAAGAAEAAAAPAAAAAAAGAAEAAAAQAAAAAAAGAAEAAAARAAAAAAAGAAEAAAAAAP//AAAGAAAAAAABAP//AAAGAAAAAAACAP//AAAGAAAAAAADAP//AAAGAAAAAAAEAP//AAAGAAAAAAAFAP//AAAGAAAAAAAGAP//AAAGAAAAAAAHAP//AAAGAAAAAAAIAP//AAAGAAAAAAAJAP//AAAGAAAAAAAKAP//AAAGAAAAAAALAP//AAAGAAAAAAAMAP//AAAGAAAAAAANAP//AAAGAAAAAAAOAP//AAAGAAAAAAAPAP//AAAGAAAAAAAQAP//AAAGAAAAAAARAP//AAAGAAAAAAA=")
@@ -48,21 +57,33 @@ script = ExtResource("3_deco")
 bands = Array[ExtResource("4_tipki")]([ExtResource("4_top")])
 tile_layer = NodePath("../TerrainGround/Ground")
 
-[node name="Pickups" type="Node2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Pickups" type="Node2D" parent="." unique_id=1088033117 node_paths=PackedStringArray("player")]
 y_sort_enabled = true
 script = ExtResource("8_pick")
-pickup_scene = ExtResource("10_pscene")
-pickups = Array[Resource]([ExtResource("9_gold_1"), ExtResource("9_gold_2"), ExtResource("9_gold_3"), ExtResource("9_gold_4"), ExtResource("9_gold_5"), ExtResource("9_gold_6"), ExtResource("9_meat")])
+item_scene = ExtResource("12_pickup_scene")
+pickups = Array[ExtResource("8_0ld40")]([ExtResource("9_gold_1"), ExtResource("9_gold_2"), ExtResource("9_gold_3"), ExtResource("9_gold_4"), ExtResource("9_gold_5"), ExtResource("9_gold_6"), ExtResource("9_meat")])
 player = NodePath("../Player")
+
+[node name="Enemies" type="Node2D" parent="." node_paths=PackedStringArray("player")]
+y_sort_enabled = true
+script = ExtResource("13_enemy_pool")
+enemies = Array[ExtResource("15_enemy_data")]([ExtResource("16_snake"), ExtResource("16_thief"), ExtResource("16_bear")])
+item_scene = ExtResource("14_enemy_scene")
+player = NodePath("../Player")
+
+[node name="LaneDirector" type="Node" parent="." node_paths=PackedStringArray("pickups", "enemies")]
+script = ExtResource("17_director")
+pickups = NodePath("../Pickups")
+enemies = NodePath("../Enemies")
 
 [node name="Player" parent="." unique_id=1586972671 instance=ExtResource("2_sugp2")]
 position = Vector2(98, 282)
 
-[node name="TerrainBottom" type="Parallax2D" parent="."]
-script = ExtResource("7_scroll")
+[node name="TerrainBottom" type="Parallax2D" parent="." unique_id=1400290633]
 repeat_size = Vector2(1152, 0)
 repeat_times = 3
 ignore_camera_scroll = true
+script = ExtResource("7_scroll")
 
 [node name="ElevatedBottom" type="TileMapLayer" parent="TerrainBottom" unique_id=508105980]
 tile_map_data = PackedByteArray("AAAAAAYAAAAGAAAAAAABAAYAAAAGAAAAAAACAAYAAAAGAAAAAAADAAYAAAAGAAAAAAAEAAYAAAAGAAAAAAAFAAYAAAAGAAAAAAAGAAYAAAAGAAAAAAAHAAYAAAAGAAAAAAAIAAYAAAAGAAAAAAAJAAYAAAAGAAAAAAAKAAYAAAAGAAAAAAALAAYAAAAGAAAAAAAMAAYAAAAGAAAAAAANAAYAAAAGAAAAAAAOAAYAAAAGAAAAAAAPAAYAAAAGAAAAAAAQAAYAAAAGAAAAAAARAAYAAAAGAAAAAAARAAgAAAAGAAIAAAAQAAgAAAAGAAIAAAAPAAgAAAAGAAIAAAAOAAgAAAAGAAIAAAANAAgAAAAGAAIAAAAMAAgAAAAGAAIAAAALAAgAAAAGAAIAAAAKAAgAAAAGAAIAAAAJAAgAAAAGAAIAAAAIAAgAAAAGAAIAAAAHAAgAAAAGAAIAAAAGAAgAAAAGAAIAAAAFAAgAAAAGAAIAAAAEAAgAAAAGAAIAAAADAAgAAAAGAAIAAAACAAgAAAAGAAIAAAABAAgAAAAGAAIAAAAAAAgAAAAGAAIAAAAAAAcAAAAGAAEAAAABAAcAAAAGAAEAAAACAAcAAAAGAAEAAAADAAcAAAAGAAEAAAAEAAcAAAAGAAEAAAAFAAcAAAAGAAEAAAAGAAcAAAAGAAEAAAAHAAcAAAAGAAEAAAAIAAcAAAAGAAEAAAAJAAcAAAAGAAEAAAAKAAcAAAAGAAEAAAALAAcAAAAGAAEAAAAMAAcAAAAGAAEAAAANAAcAAAAGAAEAAAAOAAcAAAAGAAEAAAAPAAcAAAAGAAEAAAAQAAcAAAAGAAEAAAARAAcAAAAGAAEAAAAAAAkAAAAGAAQAAAABAAkAAAAGAAQAAAACAAkAAAAGAAQAAAADAAkAAAAGAAQAAAAEAAkAAAAGAAQAAAAFAAkAAAAGAAQAAAAGAAkAAAAGAAQAAAAHAAkAAAAGAAQAAAAIAAkAAAAGAAQAAAAJAAkAAAAGAAQAAAAKAAkAAAAGAAQAAAALAAkAAAAGAAQAAAAMAAkAAAAGAAQAAAANAAkAAAAGAAQAAAAOAAkAAAAGAAQAAAAPAAkAAAAGAAQAAAAQAAkAAAAGAAQAAAARAAkAAAAGAAQAAAA=")
@@ -73,3 +94,5 @@ y_sort_enabled = true
 script = ExtResource("3_deco")
 bands = Array[ExtResource("4_tipki")]([ExtResource("6_bld"), ExtResource("5_bot")])
 tile_layer = NodePath("../TerrainGround/Ground")
+
+[node name="HUD" parent="." unique_id=2098785814 instance=ExtResource("11_hud")]

@@ -6,6 +6,8 @@
 [resource]
 script = ExtResource("1")
 display_name = "Snake"
-damage = 1
+damage = 10
 sprite_frames = ExtResource("2")
 collision_radius = 39.0
+sprite_offset = Vector2(2, -27)
+weight = 3.0

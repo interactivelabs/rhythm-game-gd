@@ -162,3 +162,6 @@ shape = SubResource("CircleShape2D_qac5l")
 sprite_frames = SubResource("SpriteFrames_qac5l")
 animation = &"idle"
 frame_progress = 0.055746518
+
+[node name="InvulnerabilityTimer" type="Timer" parent="."]
+one_shot = true

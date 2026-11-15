@@ -1,14 +1,14 @@
-[gd_resource type="Resource" script_class="PickupData" format=3]
+[gd_resource type="Resource" script_class="PickupData" format=3 uid="uid://w6yl1p0jh6lb"]
 
-[ext_resource type="Script" path="res://scripts/pickup_data.gd" id="1"]
-[ext_resource type="SpriteFrames" path="res://resources/pickups/frames/gold_6_frames.tres" id="2"]
+[ext_resource type="Script" uid="uid://bbofnv3cnfrax" path="res://scripts/pickup_data.gd" id="1"]
+[ext_resource type="SpriteFrames" uid="uid://bbwbfcqgk77fy" path="res://resources/pickups/frames/gold_6_frames.tres" id="2"]
 
 [resource]
 script = ExtResource("1")
 display_name = "Gold 6"
 sprite_frames = ExtResource("2")
 sprite_offset = Vector2(1, -34)
-score = 13
-heal = 0
+score = 130
+speed_gain = 8.0
 weight = 3
 collision_radius = 46.0

@@ -1,16 +1,9 @@
 [gd_scene format=3 uid="uid://bdkks35xowd7q"]
 
 [ext_resource type="Script" uid="uid://b7rj87186n7er" path="res://scripts/enemy.gd" id="1_md0e3"]
-[ext_resource type="Resource" path="res://resources/enemies/snake.tres" id="2_data"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_qac5l"]
-radius = 39.012817
-
-[node name="enemy" type="CharacterBody2D" unique_id=7113109]
+[node name="Enemy" type="Node2D"]
 script = ExtResource("1_md0e3")
-data = ExtResource("2_data")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1897724932]
-shape = SubResource("CircleShape2D_qac5l")
-
-[node name="EnemyAnimation" type="AnimatedSprite2D" parent="." unique_id=1296424499]
+[node name="EnemyAnimation" type="AnimatedSprite2D" parent="."]
+flip_h = true

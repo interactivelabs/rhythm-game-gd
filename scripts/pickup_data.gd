@@ -14,6 +14,9 @@ extends Resource
 @export var score: int = 0
 ## Health restored when collected.
 @export var heal: int = 0
+## World scroll speed (px/s) added when collected, multiplied by
+## GameManager.speed_scaling.
+@export var speed_gain: float = 0.0
 ## Relative chance of this type being spawned.
 @export_range(0.0, 100.0, 0.1) var weight: float = 1.0
 ## Half-width of the hit area in pixels (roughly half the art's visible width).

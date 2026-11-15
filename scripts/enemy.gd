@@ -1,60 +1,21 @@
-extends CharacterBody2D
+class_name Enemy
+extends Node2D
+## One enemy on screen. Instances are pooled and reused by EnemyPool, which calls
+## setup() each time one is spawned. Enemies stand still and scroll with the
+## world; the pool handles movement and hitting the player. Its origin is the
+## point where the enemy's feet touch the ground.
+##
+## The sprite is mirrored in the scene so enemies face the player.
 
-enum State {
-	IDLE,
-	MOVING,
-	ATTACK,
-}
-
-const STATE_ANIMATIONS := {
-	State.IDLE: "idle",
-	State.MOVING: "walking",
-	State.ATTACK: "attack",
-}
-
-## Which enemy type this is (sprites, damage, ...). See resources/enemies/.
-@export var data: EnemyData
-
-var state: State = State.IDLE
-
-var damage: int:
-	get:
-		return data.damage if data else 0
+var data: EnemyData
 
 @onready var animation: AnimatedSprite2D = $EnemyAnimation
-@onready var collision: CollisionShape2D = $CollisionShape2D
-
-func _ready() -> void:
-	assert(data != null, "%s has no EnemyData assigned" % name)
-	_apply_data()
-	_enter_state(state)
 
 
-func _physics_process(_delta: float) -> void:
-	var next_state := _get_next_state()
-	if next_state != state:
-		change_state(next_state)
-
-	move_and_slide()
-
-
-func _apply_data() -> void:
+func setup(new_data: EnemyData) -> void:
+	data = new_data
 	animation.sprite_frames = data.sprite_frames
-	# Duplicate so instances don't share (and overwrite) the same shape.
-	var shape := collision.shape.duplicate() as CircleShape2D
-	shape.radius = data.collision_radius
-	collision.shape = shape
-
-
-# Enemies just idle for now; AI will decide the state here later.
-func _get_next_state() -> State:
-	return State.IDLE
-
-
-func change_state(new_state: State) -> void:
-	state = new_state
-	_enter_state(new_state)
-
-
-func _enter_state(new_state: State) -> void:
-	animation.play(STATE_ANIMATIONS[new_state])
+	animation.offset = data.sprite_offset
+	animation.play(&"idle")
+	# Start on a random frame so neighbouring enemies don't animate in sync.
+	animation.frame = randi() % animation.sprite_frames.get_frame_count(&"idle")

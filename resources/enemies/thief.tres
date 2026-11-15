@@ -6,6 +6,8 @@
 [resource]
 script = ExtResource("1")
 display_name = "Thief"
-damage = 2
+damage = 15
 sprite_frames = ExtResource("2")
 collision_radius = 39.0
+sprite_offset = Vector2(-4, -36)
+weight = 2.0
