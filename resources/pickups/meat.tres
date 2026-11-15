@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="PickupData" format=3]
+
+[ext_resource type="Script" path="res://scripts/pickup_data.gd" id="1"]
+[ext_resource type="SpriteFrames" path="res://resources/pickups/frames/meat_frames.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Meat"
+sprite_frames = ExtResource("2")
+sprite_offset = Vector2(-1, -20)
+score = 0
+heal = 10
+weight = 8
+collision_radius = 24.0

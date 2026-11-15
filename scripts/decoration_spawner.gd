@@ -1,153 +1,102 @@
-extends Node2D
+extends ScrollPool
 ## Scrolls decorative props right-to-left to fake forward motion through the canyon.
+## Use one spawner per draw layer (e.g. one behind the player, one in front) and
+## give each only the bands that belong on that layer.
 ##
-## Performance notes (built so GameManager.scroll_speed can keep increasing):
-## - Decorations are plain Sprite2D children: no scripts, physics or signals per prop.
-##   This node moves all of them in one loop, so the cost is one _process call.
-## - Sprites come from a pre-allocated pool and are recycled when they leave the
-##   screen: nothing is instantiated or freed during play.
-## - Spawning is distance-based. Faster scrolling means sprites cross the screen
-##   sooner, but the number on screen (and so the per-frame cost) stays the same.
-## - If a frame scrolls a long way, each prop is placed where it should be by then
-##   (overshoot is carried forward), so props never bunch up at high speed.
-## - Animated props (bushes) share one clock. Their frame is only updated when
-##   that clock ticks, not on every rendered frame.
+## Spawning is distance-based: faster scrolling means props cross the screen
+## sooner, but the number on screen (and so the per-frame cost) stays the same.
+## If a frame scrolls a long way, each prop is placed where it should be by then
+## (overshoot is carried forward), so props never bunch up at high speed.
+## Placement uses each sprite's visible (non-transparent) area, so padding in the
+## art never pushes props into the lanes. Moving/pooling lives in ScrollPool.
 
 ## Bands of rows to decorate. See resources/decorations/.
 @export var bands: Array[DecorationBand] = []
 ## Tile layer used to turn band rows into y positions.
 @export var tile_layer: TileMapLayer
-## Sprites created up front. The pool grows on demand if it runs out, but that
-## shouldn't happen with sane band gaps.
-@export var initial_pool_size: int = 32
-## Frames per second for animated decorations.
-@export var animation_fps: float = 8.0
 
-var _pool: Array[Sprite2D] = []
+## Keeps feet this many pixels above the bottom edge of a band's last row.
+const FLOOR_MARGIN := 4.0
 
-# Active sprites and their per-sprite data, kept in parallel arrays.
-# Removal is swap-with-last, so order doesn't matter (y-sort handles draw order).
-var _active: Array[Sprite2D] = []
-var _half_width := PackedFloat32Array()
-var _hframes := PackedInt32Array()
-var _phase := PackedInt32Array()
-
-# Per band: x of the next prop's left edge, and which entry that prop will be.
+# Per band: entries that fit in the band, their cumulative weights, and for each
+# entry the y range where its feet can go.
+var _choices: Array = [] # Array[Array[DecorationEntry]]
+var _cumulative: Array[PackedFloat32Array] = []
+var _feet_min: Array[PackedFloat32Array] = []
+var _feet_max: Array[PackedFloat32Array] = []
+# Per band: x of the next prop's left edge, and which choice it will be.
 var _next_left := PackedFloat32Array()
-var _pending: Array[DecorationEntry] = []
-# Per band: y range where the props' feet can be placed.
-var _base_y_min := PackedFloat32Array()
-var _base_y_max := PackedFloat32Array()
-
-var _spawn_edge := 0.0
-var _anim_time := 0.0
-var _anim_tick := 0
+var _pending := PackedInt32Array()
 
 
 func _ready() -> void:
-	assert(tile_layer != null, "DecorationSpawner needs a tile_layer")
-	y_sort_enabled = true
-	for i in initial_pool_size:
-		_pool.append(_create_sprite())
-
-	get_viewport().size_changed.connect(_update_spawn_edge)
-	_update_spawn_edge()
-
-	var tile_h := float(tile_layer.tile_set.tile_size.y)
-	for band in bands:
-		assert(not band.entries.is_empty(), "DecorationBand has no entries")
-		_base_y_min.append(_row_center_y(band.min_row))
-		_base_y_max.append(_row_center_y(band.max_row) + tile_h * 0.45)
-		_pending.append(band.pick_entry())
-		# Start a little off the left edge so the screen begins already decorated.
-		_next_left.append(-randf_range(0.0, band.max_gap))
-
-	_spawn_due(0.0)
+	assert(tile_layer != null, "%s needs a tile_layer" % name)
+	super()
+	for b in bands.size():
+		_prepare_band(b)
+	_after_scroll(0.0)
 
 
-func _process(delta: float) -> void:
-	var dx := GameManager.scroll_speed * delta
+## Works out which entries fit in the band and where their feet can go.
+func _prepare_band(b: int) -> void:
+	var band := bands[b]
+	var half_tile := tile_layer.tile_set.tile_size.y * 0.5
+	var ceiling := _row_center_y(band.min_row) - half_tile - band.max_overhang
+	var floor_y := _row_center_y(band.max_row) + half_tile - FLOOR_MARGIN
 
-	_anim_time += delta
-	var tick := int(_anim_time * animation_fps)
-	var animate := tick != _anim_tick
-	_anim_tick = tick
+	var choices: Array[DecorationEntry] = []
+	var cumulative := PackedFloat32Array()
+	var feet_min := PackedFloat32Array()
+	var feet_max := PackedFloat32Array()
+	var total := 0.0
+	for entry in band.entries:
+		var lowest_feet := ceiling + entry.visible_rect().size.y
+		if lowest_feet > floor_y:
+			push_warning("%s: %s is too tall for rows %d-%d (needs %d px, has %d px); skipped." % [
+					name, entry.texture.resource_path.get_file(), band.min_row, band.max_row,
+					entry.visible_rect().size.y, floor_y - ceiling])
+			continue
+		choices.append(entry)
+		total += entry.weight
+		cumulative.append(total)
+		feet_min.append(lowest_feet)
+		feet_max.append(floor_y)
 
-	var i := _active.size() - 1
-	while i >= 0:
-		var sprite := _active[i]
-		var x := sprite.position.x - dx
-		if x + _half_width[i] < 0.0:
-			_despawn(i)
-		else:
-			sprite.position.x = x
-			if animate and _hframes[i] > 1:
-				sprite.frame = (tick + _phase[i]) % _hframes[i]
-		i -= 1
-
-	_spawn_due(dx)
+	_choices.append(choices)
+	_cumulative.append(cumulative)
+	_feet_min.append(feet_min)
+	_feet_max.append(feet_max)
+	_pending.append(_pick(b) if not choices.is_empty() else -1)
+	# Start a little off the left edge so the screen begins already decorated.
+	_next_left.append(-randf_range(0.0, band.max_gap))
 
 
 ## Moves every band's spawn cursor by dx and spawns whatever reached the right edge.
-func _spawn_due(dx: float) -> void:
+func _after_scroll(dx: float) -> void:
 	for b in bands.size():
+		if _pending[b] < 0:
+			continue
 		var left := _next_left[b] - dx
 		while left <= _spawn_edge:
-			var entry := _pending[b]
-			var width := entry.frame_size().x
-			_spawn(entry, left + width * 0.5, randf_range(_base_y_min[b], _base_y_max[b]))
-			var band := bands[b]
-			var next := band.pick_entry()
-			left += width + randf_range(band.min_gap, band.max_gap)
-			_pending[b] = next
+			var c := _pending[b]
+			var entry: DecorationEntry = _choices[b][c]
+			var vis := entry.visible_rect()
+			spawn(entry.texture, entry.hframes, vis, left + vis.size.x * 0.5,
+					randf_range(_feet_min[b][c], _feet_max[b][c]),
+					entry.allow_flip and randf() < 0.5, entry.foot_offset)
+			left += vis.size.x + randf_range(bands[b].min_gap, bands[b].max_gap)
+			_pending[b] = _pick(b)
 		_next_left[b] = left
 
 
-func _spawn(entry: DecorationEntry, center_x: float, base_y: float) -> void:
-	var sprite: Sprite2D = _pool.pop_back() if not _pool.is_empty() else _create_sprite()
-	var size := entry.frame_size()
-	sprite.texture = entry.texture
-	sprite.hframes = entry.hframes
-	var phase := randi() % entry.hframes
-	sprite.frame = (_anim_tick + phase) % entry.hframes
-	sprite.flip_h = entry.allow_flip and randf() < 0.5
-	# Anchor at bottom-centre so position.y is the prop's feet (correct y-sort depth).
-	sprite.offset = Vector2(0.0, -size.y * 0.5 + entry.foot_offset)
-	sprite.position = Vector2(center_x, base_y)
-	sprite.visible = true
-
-	_active.append(sprite)
-	_half_width.append(size.x * 0.5)
-	_hframes.append(entry.hframes)
-	_phase.append(phase)
-
-
-func _despawn(i: int) -> void:
-	var sprite := _active[i]
-	sprite.visible = false
-	_pool.append(sprite)
-
-	var last := _active.size() - 1
-	_active[i] = _active[last]
-	_half_width[i] = _half_width[last]
-	_hframes[i] = _hframes[last]
-	_phase[i] = _phase[last]
-	_active.resize(last)
-	_half_width.resize(last)
-	_hframes.resize(last)
-	_phase.resize(last)
-
-
-func _create_sprite() -> Sprite2D:
-	var sprite := Sprite2D.new()
-	sprite.visible = false
-	add_child(sprite)
-	return sprite
-
-
-func _update_spawn_edge() -> void:
-	# Spawn just past the right edge of the visible area.
-	_spawn_edge = get_viewport_rect().size.x
+## Weighted random pick; returns an index into _choices[b].
+func _pick(b: int) -> int:
+	var cumulative := _cumulative[b]
+	var roll := randf() * cumulative[-1]
+	for c in cumulative.size():
+		if roll <= cumulative[c]:
+			return c
+	return cumulative.size() - 1
 
 
 func _row_center_y(row: int) -> float:

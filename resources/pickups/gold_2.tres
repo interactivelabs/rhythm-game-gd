@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="PickupData" format=3]
+
+[ext_resource type="Script" path="res://scripts/pickup_data.gd" id="1"]
+[ext_resource type="SpriteFrames" path="res://resources/pickups/frames/gold_2_frames.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Gold 2"
+sprite_frames = ExtResource("2")
+sprite_offset = Vector2(-2, -11)
+score = 2
+heal = 0
+weight = 22
+collision_radius = 17.0

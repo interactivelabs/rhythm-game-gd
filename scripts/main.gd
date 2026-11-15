@@ -1,6 +1,6 @@
 extends Node2D
 
-@onready var ground: TileMapLayer = $Ground
+@onready var ground: TileMapLayer = $TerrainGround/Ground
 @onready var player = $Player
 
 
