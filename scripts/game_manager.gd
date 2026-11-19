@@ -6,8 +6,11 @@ signal score_changed(score: int)
 signal health_changed(health: int, max_health: int)
 ## Emitted once per whole second of run time (not every frame).
 signal run_seconds_changed(seconds: int)
-## Emitted when health reaches 0: the world stops and the run is over.
-signal run_ended
+## Emitted when the run starts (the player pressed right).
+signal run_started
+## Emitted when the run is over and the world stops. completed = true when the
+## level was finished (the song ended), false when health reached 0.
+signal run_ended(completed: bool)
 
 ## Tilemap rows of the canyon the player can move between (top to bottom).
 const LANE_ROWS: Array[int] = [3, 4, 5]
@@ -18,7 +21,7 @@ const START_LANE := 1
 const LANE_Y_OFFSET := -15.0
 ## Starting speed (pixels/second) at which the world scrolls right-to-left.
 const BASE_SCROLL_SPEED := 300.0
-const START_HEALTH := 50
+const START_HEALTH := 100
 const MAX_HEALTH := 100
 
 ## Current world scroll speed in pixels/second. Everything that fakes forward
@@ -34,11 +37,13 @@ var scroll_speed: float = 0.0:
 ## collected pickups). 1 = normal, 2 = speed ramps up twice as fast, 0 = the
 ## world never speeds up. Exported so it shows in the Remote inspector while
 ## testing.
-@export_range(0.0, 10.0, 0.05, "or_greater") var speed_scaling: float = 2.0
+@export_range(0.0, 10.0, 0.05, "or_greater") var speed_scaling: float = 1.0
 ## True once the player has started the run (pressed right), until it ends.
 var is_running := false
-## True once the run has ended (health reached 0). A new run needs a restart.
+## True once the run has ended (finished or died). A new run needs a restart.
 var is_over := false
+## True if the run ended by finishing the level (the song played to the end).
+var level_completed := false
 ## Points from collected gold.
 var score := 0
 var health := START_HEALTH
@@ -64,16 +69,24 @@ func start_run() -> void:
 		return
 	is_running = true
 	scroll_speed = BASE_SCROLL_SPEED
+	run_started.emit()
+
+
+## The level was finished (the song ended).
+func complete_level() -> void:
+	end_run(true)
 
 
 ## Ends the run: the world stops scrolling and the run timer freezes.
-func end_run() -> void:
+## completed = true if the level was finished, false if the player died.
+func end_run(completed := false) -> void:
 	if not is_running:
 		return
 	is_running = false
 	is_over = true
+	level_completed = completed
 	scroll_speed = 0.0
-	run_ended.emit()
+	run_ended.emit(completed)
 
 
 func add_score(amount: int) -> void:

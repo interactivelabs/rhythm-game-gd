@@ -10,15 +10,7 @@
 [ext_resource type="Resource" uid="uid://bjruacs2ld1nb" path="res://resources/decorations/bottom_buildings.tres" id="6_bld"]
 [ext_resource type="Script" uid="uid://cft6witr1ncgq" path="res://scripts/world_scroll_parallax.gd" id="7_scroll"]
 [ext_resource type="Script" uid="uid://bbofnv3cnfrax" path="res://scripts/pickup_data.gd" id="8_0ld40"]
-[ext_resource type="Script" path="res://scripts/pickup_pool.gd" id="8_pick"]
-[ext_resource type="PackedScene" path="res://scenes/pickup.tscn" id="12_pickup_scene"]
-[ext_resource type="Script" path="res://scripts/enemy_pool.gd" id="13_enemy_pool"]
-[ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="14_enemy_scene"]
-[ext_resource type="Script" path="res://scripts/enemy_data.gd" id="15_enemy_data"]
-[ext_resource type="Resource" path="res://resources/enemies/snake.tres" id="16_snake"]
-[ext_resource type="Resource" path="res://resources/enemies/thief.tres" id="16_thief"]
-[ext_resource type="Resource" path="res://resources/enemies/bear.tres" id="16_bear"]
-[ext_resource type="Script" path="res://scripts/lane_director.gd" id="17_director"]
+[ext_resource type="Script" uid="uid://dhoyfaimgbmx1" path="res://scripts/pickup_pool.gd" id="8_pick"]
 [ext_resource type="Resource" uid="uid://cu1pkltu175n7" path="res://resources/pickups/gold_1.tres" id="9_gold_1"]
 [ext_resource type="Resource" uid="uid://3kol4fxn1rpn" path="res://resources/pickups/gold_2.tres" id="9_gold_2"]
 [ext_resource type="Resource" uid="uid://bni7uif0sqld7" path="res://resources/pickups/gold_3.tres" id="9_gold_3"]
@@ -27,6 +19,16 @@
 [ext_resource type="Resource" uid="uid://w6yl1p0jh6lb" path="res://resources/pickups/gold_6.tres" id="9_gold_6"]
 [ext_resource type="Resource" path="res://resources/pickups/meat.tres" id="9_meat"]
 [ext_resource type="PackedScene" uid="uid://cli1v0jspfsiw" path="res://scenes/ui/hud.tscn" id="11_hud"]
+[ext_resource type="PackedScene" path="res://scenes/pickup.tscn" id="12_pickup_scene"]
+[ext_resource type="Script" uid="uid://du6vu4ajhwrw3" path="res://scripts/enemy_pool.gd" id="13_enemy_pool"]
+[ext_resource type="PackedScene" uid="uid://bdkks35xowd7q" path="res://scenes/enemy.tscn" id="14_enemy_scene"]
+[ext_resource type="Script" uid="uid://d362nj2bx5gre" path="res://scripts/enemy_data.gd" id="15_enemy_data"]
+[ext_resource type="Resource" path="res://resources/enemies/bear.tres" id="16_bear"]
+[ext_resource type="Resource" path="res://resources/enemies/snake.tres" id="16_snake"]
+[ext_resource type="Resource" path="res://resources/enemies/thief.tres" id="16_thief"]
+[ext_resource type="Script" uid="uid://xwgug588qvmy" path="res://scripts/lane_director.gd" id="17_director"]
+[ext_resource type="Script" uid="uid://sp7ddxj0xo32" path="res://scripts/music.gd" id="18_music"]
+[ext_resource type="AudioStream" uid="uid://bgw1tmy1lc2no" path="res://assets/Music/zara-larsson-lush-life.mp3" id="19_song"]
 
 [node name="main" type="Node2D" unique_id=277463119]
 script = ExtResource("1_sugp2")
@@ -60,18 +62,18 @@ tile_layer = NodePath("../TerrainGround/Ground")
 [node name="Pickups" type="Node2D" parent="." unique_id=1088033117 node_paths=PackedStringArray("player")]
 y_sort_enabled = true
 script = ExtResource("8_pick")
-item_scene = ExtResource("12_pickup_scene")
 pickups = Array[ExtResource("8_0ld40")]([ExtResource("9_gold_1"), ExtResource("9_gold_2"), ExtResource("9_gold_3"), ExtResource("9_gold_4"), ExtResource("9_gold_5"), ExtResource("9_gold_6"), ExtResource("9_meat")])
+item_scene = ExtResource("12_pickup_scene")
 player = NodePath("../Player")
 
-[node name="Enemies" type="Node2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Enemies" type="Node2D" parent="." unique_id=1495629785 node_paths=PackedStringArray("player")]
 y_sort_enabled = true
 script = ExtResource("13_enemy_pool")
 enemies = Array[ExtResource("15_enemy_data")]([ExtResource("16_snake"), ExtResource("16_thief"), ExtResource("16_bear")])
 item_scene = ExtResource("14_enemy_scene")
 player = NodePath("../Player")
 
-[node name="LaneDirector" type="Node" parent="." node_paths=PackedStringArray("pickups", "enemies")]
+[node name="LaneDirector" type="Node" parent="." unique_id=2121571812 node_paths=PackedStringArray("pickups", "enemies")]
 script = ExtResource("17_director")
 pickups = NodePath("../Pickups")
 enemies = NodePath("../Enemies")
@@ -96,3 +98,8 @@ bands = Array[ExtResource("4_tipki")]([ExtResource("6_bld"), ExtResource("5_bot"
 tile_layer = NodePath("../TerrainGround/Ground")
 
 [node name="HUD" parent="." unique_id=2098785814 instance=ExtResource("11_hud")]
+
+[node name="Music" type="AudioStreamPlayer" parent="." unique_id=1417023219]
+stream = ExtResource("19_song")
+bus = &"Music"
+script = ExtResource("18_music")
