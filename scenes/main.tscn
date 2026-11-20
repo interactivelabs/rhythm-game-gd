@@ -29,6 +29,12 @@
 [ext_resource type="Script" uid="uid://xwgug588qvmy" path="res://scripts/lane_director.gd" id="17_director"]
 [ext_resource type="Script" uid="uid://sp7ddxj0xo32" path="res://scripts/music.gd" id="18_music"]
 [ext_resource type="AudioStream" uid="uid://bgw1tmy1lc2no" path="res://assets/Music/zara-larsson-lush-life.mp3" id="19_song"]
+[ext_resource type="PackedScene" path="res://scenes/ui/end_screen.tscn" id="20_end_screen"]
+[ext_resource type="Script" uid="uid://cobmkmya1b6p4" path="res://scripts/sound_effects.gd" id="21_sfx"]
+[ext_resource type="AudioStream" uid="uid://b6tdgklnnhwjf" path="res://assets/Sounds/coin.wav" id="22_coin"]
+[ext_resource type="AudioStream" uid="uid://4wt5qwotnuof" path="res://assets/Sounds/hurt.wav" id="23_hurt"]
+[ext_resource type="AudioStream" uid="uid://colkta35vasrd" path="res://assets/Sounds/explosion.wav" id="24_explosion"]
+[ext_resource type="AudioStream" uid="uid://cvq3fvruni6eh" path="res://assets/Sounds/power_up.wav" id="25_power_up"]
 
 [node name="main" type="Node2D" unique_id=277463119]
 script = ExtResource("1_sugp2")
@@ -103,3 +109,23 @@ tile_layer = NodePath("../TerrainGround/Ground")
 stream = ExtResource("19_song")
 bus = &"Music"
 script = ExtResource("18_music")
+
+[node name="EndScreen" parent="." unique_id=216892611 instance=ExtResource("20_end_screen")]
+
+[node name="SoundEffects" type="Node" parent="." unique_id=2027389986 node_paths=PackedStringArray("pickups", "enemies")]
+script = ExtResource("21_sfx")
+pickups = NodePath("../Pickups")
+enemies = NodePath("../Enemies")
+
+[node name="Coin" type="AudioStreamPlayer" parent="SoundEffects" unique_id=385837648]
+stream = ExtResource("22_coin")
+max_polyphony = 4
+
+[node name="Hurt" type="AudioStreamPlayer" parent="SoundEffects" unique_id=1461074791]
+stream = ExtResource("23_hurt")
+
+[node name="Explosion" type="AudioStreamPlayer" parent="SoundEffects" unique_id=1305689949]
+stream = ExtResource("24_explosion")
+
+[node name="PowerUp" type="AudioStreamPlayer" parent="SoundEffects" unique_id=852293878]
+stream = ExtResource("25_power_up")

@@ -17,6 +17,8 @@ const STATE_ANIMATIONS := {
 const LANE_SWITCH_TIME := 0.15
 ## Seconds per blink (half visible, half faded) while invulnerable.
 const BLINK_TIME := 0.08
+## Seconds the death effect (flash red, sink and fade out) takes.
+const DEATH_TIME := 0.8
 
 ## Seconds of invulnerability after being hit, so one mistake can't chain hits.
 @export var invulnerable_time: float = 1.0
@@ -32,6 +34,7 @@ var _blink_tween: Tween
 
 func _ready() -> void:
 	invulnerability_timer.timeout.connect(_on_invulnerability_timeout)
+	GameManager.run_ended.connect(_on_run_ended)
 	_enter_state(state)
 
 
@@ -45,6 +48,9 @@ func _physics_process(_delta: float) -> void:
 
 	if Input.is_action_just_pressed("move_right"):
 		GameManager.start_run()
+
+	if GameManager.is_over:
+		return # run over: ignore input (e.g. Space while typing a name)
 
 	var next_state := _get_next_state()
 	if next_state != state:
@@ -76,6 +82,26 @@ func _on_invulnerability_timeout() -> void:
 	if _blink_tween:
 		_blink_tween.kill()
 	animation.modulate.a = 1.0
+
+
+func _on_run_ended(completed: bool) -> void:
+	if completed:
+		change_state(State.IDLE)
+	else:
+		_die()
+
+
+## Death effect: stop blinking, flash red, then sink down and fade out.
+func _die() -> void:
+	invulnerability_timer.stop()
+	if _blink_tween:
+		_blink_tween.kill()
+	animation.pause()
+	animation.modulate = Color(1.0, 0.35, 0.35, 1.0)
+	var tween := create_tween().set_parallel()
+	tween.tween_property(animation, "modulate:a", 0.0, DEATH_TIME).set_delay(0.2)
+	tween.tween_property(animation, "position:y", animation.position.y + 12.0, DEATH_TIME) \
+			.set_delay(0.2).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 
 
 ## Places the player on a lane instantly (no tween). Used at startup.

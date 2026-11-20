@@ -72,6 +72,19 @@ func start_run() -> void:
 	run_started.emit()
 
 
+## Puts every value back to the start of a run. Call before reloading the level
+## scene (GameManager is an autoload, so it outlives the scene).
+func reset() -> void:
+	is_running = false
+	is_over = false
+	level_completed = false
+	scroll_speed = 0.0
+	run_time = 0.0
+	score = 0
+	health = START_HEALTH
+	lane_y.clear()
+
+
 ## The level was finished (the song ended).
 func complete_level() -> void:
 	end_run(true)
@@ -97,7 +110,10 @@ func add_score(amount: int) -> void:
 
 
 ## Changes health by amount (negative to damage), clamped to 0..MAX_HEALTH.
+## Ignored once the run is over (nothing can hurt or heal you after the end).
 func change_health(amount: int) -> void:
+	if is_over:
+		return
 	var new_health := clampi(health + amount, 0, MAX_HEALTH)
 	if new_health == health:
 		return
@@ -109,6 +125,8 @@ func change_health(amount: int) -> void:
 
 ## Applies a collected pickup's effects.
 func collect(pickup: PickupData) -> void:
+	if is_over:
+		return
 	add_score(pickup.score)
 	change_health(pickup.heal)
 	add_speed(pickup.speed_gain)
