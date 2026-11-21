@@ -1,3 +1,4 @@
+class_name NightOnly
 extends CanvasItem
 ## Hidden during the day; fades in as night falls, in step with the night grade
 ## (follows GameManager.night_amount()). For night-only things like building

@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" format=3]
+[gd_resource type="SpriteFrames" format=3 uid="uid://caxegbv6uftkm"]
 
 [ext_resource type="Texture2D" uid="uid://ctucn4gbuotrd" path="res://assets/TerrainDecorations/fire.png" id="1"]
 
@@ -20,8 +20,20 @@ region = Rect2(95, 0, 20, 23)
 
 [resource]
 animations = [{
-"frames": [{"duration": 1.0, "texture": SubResource("f0")}, {"duration": 1.0, "texture": SubResource("f1")}, {"duration": 1.0, "texture": SubResource("f2")}, {"duration": 1.0, "texture": SubResource("f3")}],
-"loop": true,
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("f0")
+}, {
+"duration": 1.0,
+"texture": SubResource("f1")
+}, {
+"duration": 1.0,
+"texture": SubResource("f2")
+}, {
+"duration": 1.0,
+"texture": SubResource("f3")
+}],
+"loop": 1,
 "name": &"default",
 "speed": 8.0
 }]

@@ -1,0 +1,24 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/campfire.gd" id="1_script"]
+[ext_resource type="Shader" path="res://shaders/fire_glow.gdshader" id="2_glow"]
+[ext_resource type="SpriteFrames" path="res://resources/decorations/fire_frames.tres" id="3_fire"]
+
+[sub_resource type="ShaderMaterial" id="glow_material"]
+shader = ExtResource("2_glow")
+
+[node name="Campfire" type="Node2D"]
+z_index = 15
+script = ExtResource("1_script")
+
+[node name="Glow" type="ColorRect" parent="."]
+material = SubResource("glow_material")
+offset_left = -40.0
+offset_top = -34.0
+offset_right = 40.0
+offset_bottom = 46.0
+mouse_filter = 2
+
+[node name="Flame" type="AnimatedSprite2D" parent="."]
+sprite_frames = ExtResource("3_fire")
+autoplay = "default"

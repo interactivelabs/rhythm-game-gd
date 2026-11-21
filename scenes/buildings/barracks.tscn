@@ -1,18 +1,14 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://bkb7r7rerpswx"]
 
 [ext_resource type="Texture2D" uid="uid://dxjqoci40pnoe" path="res://assets/Buildings/Barracks.png" id="1_art"]
-[ext_resource type="SpriteFrames" path="res://resources/decorations/fire_frames.tres" id="2_fire"]
-[ext_resource type="Script" path="res://scripts/night_only.gd" id="3_night"]
+[ext_resource type="PackedScene" path="res://scenes/campfire.tscn" id="2_campfire"]
 
-[node name="Barracks" type="Node2D"]
+[node name="Barracks" type="Node2D" unique_id=1818651157]
 
-[node name="Sprite" type="Sprite2D" parent="."]
+[node name="Sprite" type="Sprite2D" parent="." unique_id=724714048]
 texture = ExtResource("1_art")
 offset = Vector2(0, -117)
 
-[node name="Campfire" type="AnimatedSprite2D" parent="."]
-z_index = 15
-position = Vector2(106, -12)
-sprite_frames = ExtResource("2_fire")
-autoplay = "default"
-script = ExtResource("3_night")
+[node name="Campfire" parent="." unique_id=473726551 instance=ExtResource("2_campfire")]
+position = Vector2(115, -44)
+scale = Vector2(1.9, 1.9)

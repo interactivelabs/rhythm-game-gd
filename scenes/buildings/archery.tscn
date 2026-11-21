@@ -1,18 +1,14 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://etxtklphq6hb"]
 
 [ext_resource type="Texture2D" uid="uid://c4knd3tllsmce" path="res://assets/Buildings/Archery.png" id="1_art"]
-[ext_resource type="SpriteFrames" path="res://resources/decorations/fire_frames.tres" id="2_fire"]
-[ext_resource type="Script" path="res://scripts/night_only.gd" id="3_night"]
+[ext_resource type="PackedScene" path="res://scenes/campfire.tscn" id="2_campfire"]
 
-[node name="Archery" type="Node2D"]
+[node name="Archery" type="Node2D" unique_id=133930856]
 
-[node name="Sprite" type="Sprite2D" parent="."]
+[node name="Sprite" type="Sprite2D" parent="." unique_id=363633938]
 texture = ExtResource("1_art")
 offset = Vector2(1.5, -112)
 
-[node name="Campfire" type="AnimatedSprite2D" parent="."]
-z_index = 15
-position = Vector2(105.5, -12)
-sprite_frames = ExtResource("2_fire")
-autoplay = "default"
-script = ExtResource("3_night")
+[node name="Campfire" parent="." unique_id=1465400837 instance=ExtResource("2_campfire")]
+position = Vector2(-31, -59)
+scale = Vector2(1.75, 1.75)

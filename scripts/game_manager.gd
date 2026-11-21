@@ -52,7 +52,7 @@ var is_night := false
 var _night_start_ms := 0
 var _night_fade_time := 0.0
 ## Points from collected gold.
-var score := 2999
+var score := 0
 var health := START_HEALTH
 ## Seconds since the run started.
 var run_time := 0.0
