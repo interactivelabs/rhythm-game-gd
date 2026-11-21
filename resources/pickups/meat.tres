@@ -1,14 +1,14 @@
-[gd_resource type="Resource" script_class="PickupData" format=3]
+[gd_resource type="Resource" script_class="PickupData" format=3 uid="uid://yiqvu3u517g5"]
 
-[ext_resource type="Script" path="res://scripts/pickup_data.gd" id="1"]
-[ext_resource type="SpriteFrames" path="res://resources/pickups/frames/meat_frames.tres" id="2"]
+[ext_resource type="Script" uid="uid://bbofnv3cnfrax" path="res://scripts/pickup_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://djibia8nr03ao" path="res://scripts/effects/pickup_effect.gd" id="1_xt7p0"]
+[ext_resource type="SpriteFrames" uid="uid://ds38b4thqm8j3" path="res://resources/pickups/frames/meat_frames.tres" id="2"]
 
 [resource]
 script = ExtResource("1")
 display_name = "Meat"
 sprite_frames = ExtResource("2")
-sprite_offset = Vector2(-1, -20)
-score = 0
+sprite_offset = Vector2(0, -15)
 heal = 10
 weight = 8
-collision_radius = 24.0
+collision_radius = 16.0

@@ -2,48 +2,48 @@
 
 [ext_resource type="Script" uid="uid://b88dxxfp466ig" path="res://scripts/decoration_band.gd" id="band"]
 [ext_resource type="Script" uid="uid://bki8ppw3e23nr" path="res://scripts/decoration_entry.gd" id="entry"]
-[ext_resource type="Texture2D" uid="uid://bq7w2q5o2dfs7" path="res://assets/Buildings/House1.png" id="tex0"]
-[ext_resource type="Texture2D" uid="uid://c1flt7byaiipx" path="res://assets/Buildings/House2.png" id="tex1"]
-[ext_resource type="Texture2D" uid="uid://1muw33e3k1qc" path="res://assets/Buildings/House3.png" id="tex2"]
-[ext_resource type="Texture2D" uid="uid://c76plqo8q880r" path="res://assets/Buildings/Tower.png" id="tex3"]
-[ext_resource type="Texture2D" uid="uid://c4knd3tllsmce" path="res://assets/Buildings/Archery.png" id="tex4"]
-[ext_resource type="Texture2D" uid="uid://dxjqoci40pnoe" path="res://assets/Buildings/Barracks.png" id="tex5"]
 [ext_resource type="Texture2D" uid="uid://c87ux36p4swql" path="res://assets/Buildings/Monastery.png" id="tex6"]
 [ext_resource type="Texture2D" uid="uid://ufkxbllmaas1" path="res://assets/Buildings/Castle.png" id="tex7"]
+[ext_resource type="PackedScene" path="res://scenes/buildings/house_1.tscn" id="scene_tex0"]
+[ext_resource type="PackedScene" path="res://scenes/buildings/house_2.tscn" id="scene_tex1"]
+[ext_resource type="PackedScene" path="res://scenes/buildings/house_3.tscn" id="scene_tex2"]
+[ext_resource type="PackedScene" path="res://scenes/buildings/tower.tscn" id="scene_tex3"]
+[ext_resource type="PackedScene" path="res://scenes/buildings/archery.tscn" id="scene_tex4"]
+[ext_resource type="PackedScene" path="res://scenes/buildings/barracks.tscn" id="scene_tex5"]
 
 [sub_resource type="Resource" id="e0"]
 script = ExtResource("entry")
-texture = ExtResource("tex0")
+scene = ExtResource("scene_tex0")
 weight = 1.5
 allow_flip = false
 
 [sub_resource type="Resource" id="e1"]
 script = ExtResource("entry")
-texture = ExtResource("tex1")
+scene = ExtResource("scene_tex1")
 weight = 1.5
 allow_flip = false
 
 [sub_resource type="Resource" id="e2"]
 script = ExtResource("entry")
-texture = ExtResource("tex2")
+scene = ExtResource("scene_tex2")
 weight = 1.5
 allow_flip = false
 
 [sub_resource type="Resource" id="e3"]
 script = ExtResource("entry")
-texture = ExtResource("tex3")
+scene = ExtResource("scene_tex3")
 weight = 0.8
 allow_flip = false
 
 [sub_resource type="Resource" id="e4"]
 script = ExtResource("entry")
-texture = ExtResource("tex4")
+scene = ExtResource("scene_tex4")
 weight = 0.6
 allow_flip = false
 
 [sub_resource type="Resource" id="e5"]
 script = ExtResource("entry")
-texture = ExtResource("tex5")
+scene = ExtResource("scene_tex5")
 weight = 0.6
 allow_flip = false
 

@@ -65,13 +65,23 @@ func take_hit(damage: int) -> bool:
 	if is_invulnerable():
 		return false
 	GameManager.change_health(-damage)
-	invulnerability_timer.start(invulnerable_time)
+	make_invulnerable(invulnerable_time)
+	return true
+
+
+## Enemies can't hurt the player for `duration` seconds (the player blinks).
+## If already invulnerable for longer, that is kept.
+func make_invulnerable(duration: float) -> void:
+	if GameManager.is_over:
+		return
+	if invulnerability_timer.time_left >= duration:
+		return
+	invulnerability_timer.start(duration)
 	if _blink_tween:
 		_blink_tween.kill()
 	_blink_tween = create_tween().set_loops()
 	_blink_tween.tween_property(animation, "modulate:a", 0.25, BLINK_TIME)
 	_blink_tween.tween_property(animation, "modulate:a", 1.0, BLINK_TIME)
-	return true
 
 
 func is_invulnerable() -> bool:

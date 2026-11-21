@@ -1,6 +1,6 @@
 class_name PickupData
 extends Resource
-## Per-type pickup configuration (gold stones, meat, ...). One .tres per type,
+## Per-type pickup configuration (gold stones, food, ...). One .tres per type,
 ## listed on the PickupSpawner. See resources/pickups/. Shown in game by
 ## scenes/pickup.tscn, which plays sprite_frames' "default" animation.
 
@@ -17,6 +17,9 @@ extends Resource
 ## World scroll speed (px/s) added when collected, multiplied by
 ## GameManager.speed_scaling.
 @export var speed_gain: float = 0.0
+## Extra effects applied when collected (invulnerability, slow-down, ...).
+## They combine: list as many as you like. See scripts/effects/.
+@export var effects: Array[PickupEffect] = []
 ## Relative chance of this type being spawned.
 @export_range(0.0, 100.0, 0.1) var weight: float = 1.0
 ## Half-width of the hit area in pixels (roughly half the art's visible width).

@@ -11,13 +11,17 @@
 [ext_resource type="Script" uid="uid://cft6witr1ncgq" path="res://scripts/world_scroll_parallax.gd" id="7_scroll"]
 [ext_resource type="Script" uid="uid://bbofnv3cnfrax" path="res://scripts/pickup_data.gd" id="8_0ld40"]
 [ext_resource type="Script" uid="uid://dhoyfaimgbmx1" path="res://scripts/pickup_pool.gd" id="8_pick"]
+[ext_resource type="Resource" path="res://resources/pickups/apple.tres" id="9_apple"]
+[ext_resource type="Resource" uid="uid://c2n5byti3xw6l" path="res://resources/pickups/cake.tres" id="9_cake"]
 [ext_resource type="Resource" uid="uid://cu1pkltu175n7" path="res://resources/pickups/gold_1.tres" id="9_gold_1"]
 [ext_resource type="Resource" uid="uid://3kol4fxn1rpn" path="res://resources/pickups/gold_2.tres" id="9_gold_2"]
 [ext_resource type="Resource" uid="uid://bni7uif0sqld7" path="res://resources/pickups/gold_3.tres" id="9_gold_3"]
 [ext_resource type="Resource" uid="uid://shvt5chp5m2j" path="res://resources/pickups/gold_4.tres" id="9_gold_4"]
 [ext_resource type="Resource" uid="uid://bnrp1a6dck8r2" path="res://resources/pickups/gold_5.tres" id="9_gold_5"]
 [ext_resource type="Resource" uid="uid://w6yl1p0jh6lb" path="res://resources/pickups/gold_6.tres" id="9_gold_6"]
-[ext_resource type="Resource" path="res://resources/pickups/meat.tres" id="9_meat"]
+[ext_resource type="Resource" uid="uid://yiqvu3u517g5" path="res://resources/pickups/meat.tres" id="9_meat"]
+[ext_resource type="Resource" uid="uid://cmm3ilm58w27n" path="res://resources/pickups/taco.tres" id="9_taco"]
+[ext_resource type="Resource" path="res://resources/pickups/watermelon.tres" id="9_watermelon"]
 [ext_resource type="PackedScene" uid="uid://cli1v0jspfsiw" path="res://scenes/ui/hud.tscn" id="11_hud"]
 [ext_resource type="PackedScene" path="res://scenes/pickup.tscn" id="12_pickup_scene"]
 [ext_resource type="Script" uid="uid://du6vu4ajhwrw3" path="res://scripts/enemy_pool.gd" id="13_enemy_pool"]
@@ -35,6 +39,23 @@
 [ext_resource type="AudioStream" uid="uid://4wt5qwotnuof" path="res://assets/Sounds/hurt.wav" id="23_hurt"]
 [ext_resource type="AudioStream" uid="uid://colkta35vasrd" path="res://assets/Sounds/explosion.wav" id="24_explosion"]
 [ext_resource type="AudioStream" uid="uid://cvq3fvruni6eh" path="res://assets/Sounds/power_up.wav" id="25_power_up"]
+[ext_resource type="AudioStream" uid="uid://dul8ir83oujhj" path="res://assets/Sounds/eat.wav" id="26_eat"]
+[ext_resource type="Script" uid="uid://c2l83qt0vswl1" path="res://scripts/ui/feedback_popups.gd" id="30_popups"]
+[ext_resource type="PackedScene" path="res://scenes/ui/floating_text.tscn" id="31_popup_scene"]
+[ext_resource type="Texture2D" uid="uid://ephie8x6djck" path="res://assets/UIElements/Icons/Icon_05.png" id="32_sword"]
+[ext_resource type="Texture2D" uid="uid://vp0hgjoiu0bc" path="res://assets/UIElements/Icons/Icon_04.png" id="33_meat_icon"]
+[ext_resource type="Texture2D" uid="uid://wwnbpe7wlqxr" path="res://assets/UIElements/Icons/Icon_03.png" id="34_coin_icon"]
+[ext_resource type="Script" uid="uid://f67qb3nwuhge" path="res://scripts/night_overlay.gd" id="40_night"]
+[ext_resource type="Shader" uid="uid://c6bx1p68r8qjt" path="res://shaders/night.gdshader" id="41_night_shader"]
+
+[sub_resource type="ShaderMaterial" id="night_material"]
+shader = ExtResource("41_night_shader")
+shader_parameter/amount = 0.0
+shader_parameter/desaturation = 0.6
+shader_parameter/shadow_tint = Color(0.12, 0.16, 0.35, 1)
+shader_parameter/highlight_tint = Color(0.75, 0.85, 1, 1)
+shader_parameter/brightness = 0.85
+shader_parameter/vignette = 0.45
 
 [node name="main" type="Node2D" unique_id=277463119]
 script = ExtResource("1_sugp2")
@@ -68,7 +89,7 @@ tile_layer = NodePath("../TerrainGround/Ground")
 [node name="Pickups" type="Node2D" parent="." unique_id=1088033117 node_paths=PackedStringArray("player")]
 y_sort_enabled = true
 script = ExtResource("8_pick")
-pickups = Array[ExtResource("8_0ld40")]([ExtResource("9_gold_1"), ExtResource("9_gold_2"), ExtResource("9_gold_3"), ExtResource("9_gold_4"), ExtResource("9_gold_5"), ExtResource("9_gold_6"), ExtResource("9_meat")])
+pickups = Array[ExtResource("8_0ld40")]([ExtResource("9_gold_1"), ExtResource("9_gold_2"), ExtResource("9_gold_3"), ExtResource("9_gold_4"), ExtResource("9_gold_5"), ExtResource("9_gold_6"), ExtResource("9_meat"), ExtResource("9_apple"), ExtResource("9_watermelon"), ExtResource("9_taco"), ExtResource("9_cake")])
 item_scene = ExtResource("12_pickup_scene")
 player = NodePath("../Player")
 
@@ -119,13 +140,42 @@ enemies = NodePath("../Enemies")
 
 [node name="Coin" type="AudioStreamPlayer" parent="SoundEffects" unique_id=385837648]
 stream = ExtResource("22_coin")
+bus = &"SFX"
+max_polyphony = 4
+
+[node name="Eat" type="AudioStreamPlayer" parent="SoundEffects" unique_id=673564141]
+stream = ExtResource("26_eat")
+bus = &"SFX"
 max_polyphony = 4
 
 [node name="Hurt" type="AudioStreamPlayer" parent="SoundEffects" unique_id=1461074791]
 stream = ExtResource("23_hurt")
+bus = &"SFX"
 
 [node name="Explosion" type="AudioStreamPlayer" parent="SoundEffects" unique_id=1305689949]
 stream = ExtResource("24_explosion")
+bus = &"SFX"
 
 [node name="PowerUp" type="AudioStreamPlayer" parent="SoundEffects" unique_id=852293878]
 stream = ExtResource("25_power_up")
+bus = &"SFX"
+
+[node name="FeedbackPopups" type="Node2D" parent="." unique_id=1002547015 node_paths=PackedStringArray("player", "pickups", "enemies")]
+z_index = 20
+script = ExtResource("30_popups")
+popup_scene = ExtResource("31_popup_scene")
+player = NodePath("../Player")
+pickups = NodePath("../Pickups")
+enemies = NodePath("../Enemies")
+damage_icon = ExtResource("32_sword")
+heal_icon = ExtResource("33_meat_icon")
+gold_icon = ExtResource("34_coin_icon")
+
+[node name="NightOverlay" type="ColorRect" parent="." unique_id=645214165 node_paths=PackedStringArray("player")]
+z_index = 10
+material = SubResource("night_material")
+offset_right = 1152.0
+offset_bottom = 648.0
+mouse_filter = 2
+script = ExtResource("40_night")
+player = NodePath("../Player")

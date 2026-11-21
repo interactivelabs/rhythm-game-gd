@@ -1,0 +1,18 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://45ceo76sow5u"]
+
+[ext_resource type="Texture2D" uid="uid://ddfj3s56p0wji" path="res://assets/Meat/food.png" id="1"]
+
+[sub_resource type="AtlasTexture" id="f0"]
+atlas = ExtResource("1")
+region = Rect2(288, 0, 32, 32)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("f0")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]

@@ -17,6 +17,8 @@ extends ScrollPool
 
 ## Keeps feet this many pixels above the bottom edge of a band's last row.
 const FLOOR_MARGIN := 4.0
+## Instances created up front for each scene-based entry (see DecorationEntry.scene).
+const SCENE_PREWARM := 3
 
 # Per band: entries that fit in the band, their cumulative weights, and for each
 # entry the y range where its feet can go.
@@ -53,10 +55,12 @@ func _prepare_band(b: int) -> void:
 		var lowest_feet := ceiling + entry.visible_rect().size.y
 		if lowest_feet > floor_y:
 			push_warning("%s: %s is too tall for rows %d-%d (needs %d px, has %d px); skipped." % [
-					name, entry.texture.resource_path.get_file(), band.min_row, band.max_row,
+					name, entry.display_name(), band.min_row, band.max_row,
 					entry.visible_rect().size.y, floor_y - ceiling])
 			continue
 		choices.append(entry)
+		if entry.scene:
+			prewarm_scene(entry.scene, SCENE_PREWARM)
 		total += entry.weight
 		cumulative.append(total)
 		feet_min.append(lowest_feet)
@@ -81,9 +85,12 @@ func _after_scroll(dx: float) -> void:
 			var c := _pending[b]
 			var entry: DecorationEntry = _choices[b][c]
 			var vis := entry.visible_rect()
-			spawn(entry.texture, entry.hframes, vis, left + vis.size.x * 0.5,
-					randf_range(_feet_min[b][c], _feet_max[b][c]),
-					entry.allow_flip and randf() < 0.5, entry.foot_offset)
+			var feet_y := randf_range(_feet_min[b][c], _feet_max[b][c])
+			if entry.scene:
+				spawn_scene(entry.scene, left + vis.size.x * 0.5, feet_y, vis.size.x * 0.5)
+			else:
+				spawn(entry.texture, entry.hframes, vis, left + vis.size.x * 0.5, feet_y,
+						entry.allow_flip and randf() < 0.5, entry.foot_offset)
 			left += vis.size.x + randf_range(bands[b].min_gap, bands[b].max_gap)
 			_pending[b] = _pick(b)
 		_next_left[b] = left

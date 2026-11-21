@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="PickupData" format=3 uid="uid://cmm3ilm58w27n"]
+
+[ext_resource type="Script" uid="uid://bbofnv3cnfrax" path="res://scripts/pickup_data.gd" id="1"]
+[ext_resource type="SpriteFrames" uid="uid://dbhogjamk85px" path="res://resources/pickups/frames/taco_frames.tres" id="2"]
+[ext_resource type="Script" uid="uid://biruwonl65bco" path="res://scripts/effects/invulnerability_effect.gd" id="3"]
+[ext_resource type="Script" uid="uid://djibia8nr03ao" path="res://scripts/effects/pickup_effect.gd" id="4"]
+[ext_resource type="Texture2D" uid="uid://dy0m4gyap7vt3" path="res://assets/UIElements/Icons/Icon_06.png" id="5_shield"]
+
+[sub_resource type="Resource" id="effect_1"]
+script = ExtResource("3")
+duration = 5.0
+icon = ExtResource("5_shield")
+
+[resource]
+script = ExtResource("1")
+display_name = "Taco"
+sprite_frames = ExtResource("2")
+sprite_offset = Vector2(0, -15)
+heal = 5
+effects = Array[ExtResource("4")]([SubResource("effect_1")])
+weight = 2
+collision_radius = 15.0

@@ -35,6 +35,8 @@ var _spawn_edge := 0.0
 var _anim_tick := 0
 
 var _pool: Array[Node2D] = []
+## Separate pools for items made from scenes (see spawn_scene()), per scene.
+var _scene_pools: Dictionary[PackedScene, Array] = {}
 var _anim_time := 0.0
 
 
@@ -137,11 +139,33 @@ func spawn(texture: Texture2D, hframes: int, vis: Rect2, center_x: float, feet_y
 	return activate(sprite, center_x, feet_y, vis.size.x * 0.5, tag, hframes, phase)
 
 
+## Shows a pooled instance of `scene` with its origin at (x, y) and starts
+## scrolling it. The scene's origin should be where its art stands (bottom
+## centre). half_width is used to tell when it has left the screen.
+## Instances are pooled per scene, so this is cheap after the first few.
+func spawn_scene(scene: PackedScene, x: float, y: float, half_width: float, tag := 0) -> int:
+	var pool: Array = _scene_pools.get_or_add(scene, [])
+	var item: Node2D = pool.pop_back() if not pool.is_empty() else _new_scene_item(scene)
+	return activate(item, x, y, half_width, tag)
+
+
+## Creates `count` instances of `scene` up front, so spawning them later
+## doesn't have to instantiate during play.
+func prewarm_scene(scene: PackedScene, count: int) -> void:
+	var pool: Array = _scene_pools.get_or_add(scene, [])
+	for i in count:
+		pool.append(_new_scene_item(scene))
+
+
 ## Hides item i and returns it to the pool. Swaps the last item into slot i, so
 ## when iterating while despawning, go from the end backwards.
 func despawn(i: int) -> void:
-	_deactivate(_active[i])
-	_pool.append(_active[i])
+	var item := _active[i]
+	_deactivate(item)
+	if item.has_meta(&"pool_scene"):
+		_scene_pools[item.get_meta(&"pool_scene")].append(item)
+	else:
+		_pool.append(item)
 
 	var last := _active.size() - 1
 	_active[i] = _active[last]
@@ -154,6 +178,14 @@ func despawn(i: int) -> void:
 	_hframes.resize(last)
 	_phase.resize(last)
 	_tag.resize(last)
+
+
+func _new_scene_item(scene: PackedScene) -> Node2D:
+	var item := scene.instantiate() as Node2D
+	item.set_meta(&"pool_scene", scene)
+	add_child(item)
+	_deactivate(item)
+	return item
 
 
 func _new_pooled_item() -> Node2D:

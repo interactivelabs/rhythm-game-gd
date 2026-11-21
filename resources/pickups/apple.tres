@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="PickupData" format=3]
+
+[ext_resource type="Script" uid="uid://bbofnv3cnfrax" path="res://scripts/pickup_data.gd" id="1"]
+[ext_resource type="SpriteFrames" path="res://resources/pickups/frames/apple_frames.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Apple"
+sprite_frames = ExtResource("2")
+sprite_offset = Vector2(0, -15)
+heal = 20
+weight = 5
+collision_radius = 14.0

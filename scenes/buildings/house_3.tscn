@@ -1,0 +1,18 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" uid="uid://1muw33e3k1qc" path="res://assets/Buildings/House3.png" id="1_art"]
+[ext_resource type="SpriteFrames" path="res://resources/decorations/fire_frames.tres" id="2_fire"]
+[ext_resource type="Script" path="res://scripts/night_only.gd" id="3_night"]
+
+[node name="House3" type="Node2D"]
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("1_art")
+offset = Vector2(0, -76)
+
+[node name="Campfire" type="AnimatedSprite2D" parent="."]
+z_index = 15
+position = Vector2(75, -12)
+sprite_frames = ExtResource("2_fire")
+autoplay = "default"
+script = ExtResource("3_night")

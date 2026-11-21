@@ -1,7 +1,8 @@
 class_name PickupPool
 extends LanePool
-## Pool of pickups (gold, meat, ...) placed in the lanes by the LaneDirector.
-## Touching one applies it to GameManager (score, health, speed) and removes it.
+## Pool of pickups (gold, food, ...) placed in the lanes by the LaneDirector.
+## Touching one applies it to GameManager (score, health, speed),
+## runs its effects on the player, and removes it.
 
 ## Emitted after a pickup has been applied to GameManager (for sounds/effects).
 signal collected(pickup: PickupData, at: Vector2)
@@ -26,6 +27,11 @@ func _setup_item(item: Node2D, index: int) -> void:
 
 
 func _on_touched(index: int, at: Vector2) -> bool:
-	GameManager.collect(pickups[index])
-	collected.emit(pickups[index], at)
+	if GameManager.is_over:
+		return true
+	var pickup := pickups[index]
+	GameManager.collect(pickup)
+	for effect in pickup.effects:
+		effect.apply(player as Player)
+	collected.emit(pickup, at)
 	return true

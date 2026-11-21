@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="PickupData" format=3 uid="uid://c2n5byti3xw6l"]
+
+[ext_resource type="Script" uid="uid://bbofnv3cnfrax" path="res://scripts/pickup_data.gd" id="1"]
+[ext_resource type="SpriteFrames" uid="uid://clp8x2u3nwsy0" path="res://resources/pickups/frames/cake_frames.tres" id="2"]
+[ext_resource type="Script" uid="uid://bl47bidl6g47w" path="res://scripts/effects/slow_world_effect.gd" id="3"]
+[ext_resource type="Script" uid="uid://djibia8nr03ao" path="res://scripts/effects/pickup_effect.gd" id="4"]
+
+[sub_resource type="Resource" id="effect_1"]
+script = ExtResource("3")
+
+[resource]
+script = ExtResource("1")
+display_name = "Cake"
+sprite_frames = ExtResource("2")
+sprite_offset = Vector2(0, -15)
+heal = 5
+effects = Array[ExtResource("4")]([SubResource("effect_1")])
+weight = 2
+collision_radius = 15.0

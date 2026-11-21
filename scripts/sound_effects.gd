@@ -1,6 +1,6 @@
 extends Node
 ## Plays the game's sound effects in response to what happens in the level:
-## coin when gold is collected, hurt when an enemy hits the player, explosion
+## coin when gold is collected, a chomp when food is eaten, hurt when an enemy hits the player, explosion
 ## when the player dies and power-up when the level is completed. Each sound is
 ## a child AudioStreamPlayer (on the SFX bus), so volumes can be tuned per sound
 ## in the scene. Nothing else needs to know this node exists.
@@ -9,6 +9,7 @@ extends Node
 @export var enemies: EnemyPool
 
 @onready var coin: AudioStreamPlayer = $Coin
+@onready var eat: AudioStreamPlayer = $Eat
 @onready var hurt: AudioStreamPlayer = $Hurt
 @onready var explosion: AudioStreamPlayer = $Explosion
 @onready var power_up: AudioStreamPlayer = $PowerUp
@@ -23,9 +24,11 @@ func _ready() -> void:
 
 
 func _on_pickup_collected(pickup: PickupData, _at: Vector2) -> void:
-	# Gold is anything worth points (meat only heals).
+	# Gold is anything worth points; everything else is food.
 	if pickup.score > 0:
 		coin.play()
+	else:
+		eat.play()
 
 
 func _on_player_hit(_enemy: EnemyData, _at: Vector2) -> void:

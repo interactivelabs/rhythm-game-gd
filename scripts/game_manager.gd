@@ -11,6 +11,9 @@ signal run_started
 ## Emitted when the run is over and the world stops. completed = true when the
 ## level was finished (the song ended), false when health reached 0.
 signal run_ended(completed: bool)
+## Emitted once when night falls; fade_time is how long the change takes, so
+## night-only things (e.g. building campfires) can fade in along with it.
+signal night_started(fade_time: float)
 
 ## Tilemap rows of the canyon the player can move between (top to bottom).
 const LANE_ROWS: Array[int] = [3, 4, 5]
@@ -44,8 +47,12 @@ var is_running := false
 var is_over := false
 ## True if the run ended by finishing the level (the song played to the end).
 var level_completed := false
+## True once night has fallen this run (see NightOverlay).
+var is_night := false
+var _night_start_ms := 0
+var _night_fade_time := 0.0
 ## Points from collected gold.
-var score := 0
+var score := 2999
 var health := START_HEALTH
 ## Seconds since the run started.
 var run_time := 0.0
@@ -78,6 +85,7 @@ func reset() -> void:
 	is_running = false
 	is_over = false
 	level_completed = false
+	is_night = false
 	scroll_speed = 0.0
 	run_time = 0.0
 	score = 0
@@ -137,6 +145,38 @@ func add_speed(amount: float) -> void:
 	if not is_running or amount == 0.0:
 		return
 	scroll_speed += amount * speed_scaling
+
+
+## Makes it night (once per run). Things that change at night listen to
+## night_started or check is_night when they appear.
+func start_night(fade_time: float) -> void:
+	if is_night:
+		return
+	is_night = true
+	_night_start_ms = Time.get_ticks_msec()
+	_night_fade_time = fade_time
+	night_started.emit(fade_time)
+
+
+## How far night has fallen: 0 = day, 1 = full night, easing in and out over
+## the fade time. One shared value, so everything that changes at night (the
+## colour grade, campfires, ...) stays in step, even things that only appear
+## halfway through the fade.
+func night_amount() -> float:
+	if not is_night:
+		return 0.0
+	if _night_fade_time <= 0.0:
+		return 1.0
+	var t := clampf((Time.get_ticks_msec() - _night_start_ms) / 1000.0 / _night_fade_time, 0.0, 1.0)
+	return 0.5 - 0.5 * cos(PI * t)
+
+
+## Multiplies the world speed by factor (e.g. 0.8 to slow down by 20%), never
+## going below BASE_SCROLL_SPEED. Only while running.
+func scale_speed(factor: float) -> void:
+	if not is_running:
+		return
+	scroll_speed = maxf(BASE_SCROLL_SPEED, scroll_speed * factor)
 
 
 ## Computes lane positions from the given tilemap layer.

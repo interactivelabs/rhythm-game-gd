@@ -1,9 +1,14 @@
 [gd_scene format=3 uid="uid://bdkks35xowd7q"]
 
 [ext_resource type="Script" uid="uid://b7rj87186n7er" path="res://scripts/enemy.gd" id="1_md0e3"]
+[ext_resource type="Script" path="res://scripts/afterimage_trail.gd" id="9_trail"]
 
 [node name="Enemy" type="Node2D"]
 script = ExtResource("1_md0e3")
+
+[node name="AfterimageTrail" type="Node2D" parent="." node_paths=PackedStringArray("source")]
+script = ExtResource("9_trail")
+source = NodePath("../EnemyAnimation")
 
 [node name="EnemyAnimation" type="AnimatedSprite2D" parent="."]
 flip_h = true
