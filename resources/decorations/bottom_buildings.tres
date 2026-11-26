@@ -2,12 +2,12 @@
 
 [ext_resource type="Script" uid="uid://b88dxxfp466ig" path="res://scripts/decoration_band.gd" id="band"]
 [ext_resource type="Script" uid="uid://bki8ppw3e23nr" path="res://scripts/decoration_entry.gd" id="entry"]
-[ext_resource type="PackedScene" path="res://scenes/buildings/house_1.tscn" id="scene_tex0"]
-[ext_resource type="PackedScene" path="res://scenes/buildings/house_2.tscn" id="scene_tex1"]
-[ext_resource type="PackedScene" path="res://scenes/buildings/house_3.tscn" id="scene_tex2"]
-[ext_resource type="PackedScene" path="res://scenes/buildings/tower.tscn" id="scene_tex3"]
+[ext_resource type="PackedScene" uid="uid://utv23vqm0opp" path="res://scenes/buildings/house_1.tscn" id="scene_tex0"]
+[ext_resource type="PackedScene" uid="uid://ck4mx8pv72js8" path="res://scenes/buildings/house_2.tscn" id="scene_tex1"]
+[ext_resource type="PackedScene" uid="uid://h1ol62yf6usv" path="res://scenes/buildings/house_3.tscn" id="scene_tex2"]
+[ext_resource type="PackedScene" uid="uid://cu34ymq64hxr6" path="res://scenes/buildings/tower.tscn" id="scene_tex3"]
 [ext_resource type="PackedScene" uid="uid://etxtklphq6hb" path="res://scenes/buildings/archery.tscn" id="scene_tex4"]
-[ext_resource type="PackedScene" path="res://scenes/buildings/barracks.tscn" id="scene_tex5"]
+[ext_resource type="PackedScene" uid="uid://bkb7r7rerpswx" path="res://scenes/buildings/barracks.tscn" id="scene_tex5"]
 [ext_resource type="Texture2D" uid="uid://c87ux36p4swql" path="res://assets/Buildings/Monastery.png" id="tex6"]
 [ext_resource type="Texture2D" uid="uid://ufkxbllmaas1" path="res://assets/Buildings/Castle.png" id="tex7"]
 
