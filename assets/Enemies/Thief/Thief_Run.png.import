@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cyfxg4i013xit"
-path="res://.godot/imported/Thief_Run.png-7aecb4f91bb41764d91bbbe3cf6fc731.ctex"
+path="res://.godot/imported/Thief_Run.png-5aa9beaae43e1719d6d28dff0fbc11bf.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://assets/Enemies/Thief/Thief_Run.png"
-dest_files=["res://.godot/imported/Thief_Run.png-7aecb4f91bb41764d91bbbe3cf6fc731.ctex"]
+dest_files=["res://.godot/imported/Thief_Run.png-5aa9beaae43e1719d6d28dff0fbc11bf.ctex"]
 
 [params]
 
