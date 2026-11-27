@@ -97,7 +97,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("attack_5")
 }],
-"loop": 1,
+"loop": 0,
 "name": &"attack",
 "speed": 10.0
 }, {

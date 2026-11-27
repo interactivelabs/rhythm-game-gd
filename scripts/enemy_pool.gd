@@ -26,6 +26,16 @@ func _setup_item(item: Node2D, index: int) -> void:
 	(item as Enemy).setup(enemies[index])
 
 
+## Starts each enemy's attack so it is attack_contact_progress through it on contact.
+## Timed by seconds-to-contact rather than a fixed distance, so the swing stays
+## in sync as scroll_speed rises. Lane-agnostic: enemies swing at a dodging
+## player too. Enemy.attack() only fires once per spawn.
+func _on_approach(item: Node2D, _index: int, distance: float) -> void:
+	var enemy := item as Enemy
+	if distance <= GameManager.scroll_speed * enemy.attack_lead_time:
+		enemy.attack()
+
+
 func _on_touched(index: int, at: Vector2) -> bool:
 	# While invulnerable the player passes through and the enemy stays.
 	if not (player as Player).take_hit(enemies[index].damage):

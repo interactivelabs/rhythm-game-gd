@@ -73,6 +73,14 @@ func _on_touched(_index: int, _at: Vector2) -> bool:
 	return true
 
 
+## Called every frame for each item still on screen. distance is how far (px)
+## the item's front edge is from touching the player's hit circle, measured on
+## x only and ignoring lanes; it goes negative once the item has reached the
+## player. Use it for anticipation (e.g. enemies winding up an attack).
+func _on_approach(_item: Node2D, _index: int, _distance: float) -> void:
+	pass
+
+
 # --- Used by the LaneDirector ----------------------------------------------------
 
 ## Weighted random data index (by _weights()), or -1 if there is no data.
@@ -109,15 +117,19 @@ func place(index: int, lane: int, center_x: float) -> void:
 func _after_scroll(dx: float) -> void:
 	if _active.is_empty() or GameManager.lane_count() == 0:
 		return
+	var player_front := to_local(player.global_position).x + _player_radius
 	var i := _active.size() - 1
 	while i >= 0:
 		var tag := _tag[i]
 		var index := tag >> LANE_BITS
+		var radius := _radius(index)
 		var x_now := _active[i].position.x
 		# Touched anywhere between where it was last frame and where it is now.
-		if _touches_player(_radius(index), tag & ((1 << LANE_BITS) - 1), x_now, x_now + dx) \
+		if _touches_player(radius, tag & ((1 << LANE_BITS) - 1), x_now, x_now + dx) \
 				and _on_touched(index, _active[i].position):
 			despawn(i)
+		else:
+			_on_approach(_active[i], index, x_now - radius - player_front)
 		i -= 1
 
 

@@ -1,13 +1,11 @@
-[gd_resource type="Resource" script_class="EnemyData" format=3]
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://c645ql0tjdtdn"]
 
-[ext_resource type="Script" path="res://scripts/enemy_data.gd" id="1"]
-[ext_resource type="SpriteFrames" path="res://resources/enemies/frames/snake_frames.tres" id="2"]
+[ext_resource type="Script" uid="uid://d362nj2bx5gre" path="res://scripts/enemy_data.gd" id="1"]
+[ext_resource type="SpriteFrames" uid="uid://52iked0sliej" path="res://resources/enemies/frames/snake_frames.tres" id="2"]
 
 [resource]
 script = ExtResource("1")
 display_name = "Snake"
-damage = 10
 sprite_frames = ExtResource("2")
-collision_radius = 39.0
 sprite_offset = Vector2(2, -27)
 weight = 3.0

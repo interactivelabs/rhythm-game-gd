@@ -27,9 +27,9 @@
 [ext_resource type="Script" uid="uid://du6vu4ajhwrw3" path="res://scripts/enemy_pool.gd" id="13_enemy_pool"]
 [ext_resource type="PackedScene" uid="uid://bdkks35xowd7q" path="res://scenes/enemy.tscn" id="14_enemy_scene"]
 [ext_resource type="Script" uid="uid://d362nj2bx5gre" path="res://scripts/enemy_data.gd" id="15_enemy_data"]
-[ext_resource type="Resource" path="res://resources/enemies/bear.tres" id="16_bear"]
-[ext_resource type="Resource" path="res://resources/enemies/snake.tres" id="16_snake"]
-[ext_resource type="Resource" path="res://resources/enemies/thief.tres" id="16_thief"]
+[ext_resource type="Resource" uid="uid://cwk00d5oyko3w" path="res://resources/enemies/bear.tres" id="16_bear"]
+[ext_resource type="Resource" uid="uid://c645ql0tjdtdn" path="res://resources/enemies/snake.tres" id="16_snake"]
+[ext_resource type="Resource" uid="uid://cqpx1iigjsi2o" path="res://resources/enemies/thief.tres" id="16_thief"]
 [ext_resource type="Script" uid="uid://xwgug588qvmy" path="res://scripts/lane_director.gd" id="17_director"]
 [ext_resource type="Script" uid="uid://sp7ddxj0xo32" path="res://scripts/music.gd" id="18_music"]
 [ext_resource type="AudioStream" uid="uid://bgw1tmy1lc2no" path="res://assets/Music/zara-larsson-lush-life.mp3" id="19_song"]
@@ -131,6 +131,7 @@ tile_layer = NodePath("../TerrainGround/Ground")
 
 [node name="Music" type="AudioStreamPlayer" parent="." unique_id=1417023219]
 stream = ExtResource("19_song")
+volume_db = -62.035
 bus = &"Music"
 script = ExtResource("18_music")
 
