@@ -1,8 +1,8 @@
 [gd_resource type="SpriteFrames" format=3 uid="uid://kchhndvltif7"]
 
-[ext_resource type="Texture2D" uid="uid://b70tsc5ioo1ae" path="res://assets/Bear/Bear_Idle.png" id="1"]
-[ext_resource type="Texture2D" uid="uid://bmacsti70m3bs" path="res://assets/Bear/Bear_Run.png" id="2"]
-[ext_resource type="Texture2D" uid="uid://dbepnvmamlck7" path="res://assets/Bear/Bear_Attack.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://b70tsc5ioo1ae" path="res://assets/Enemies/Bear/Bear_Idle.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://bmacsti70m3bs" path="res://assets/Enemies/Bear/Bear_Run.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://dbepnvmamlck7" path="res://assets/Enemies/Bear/Bear_Attack.png" id="3"]
 
 [sub_resource type="AtlasTexture" id="attack_0"]
 atlas = ExtResource("3")

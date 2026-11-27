@@ -1,8 +1,8 @@
 [gd_resource type="SpriteFrames" format=3 uid="uid://b5kj45nteiygs"]
 
-[ext_resource type="Texture2D" uid="uid://cwbyr1wssxoxb" path="res://assets/Thief/Thief_Idle.png" id="1"]
-[ext_resource type="Texture2D" uid="uid://cyfxg4i013xit" path="res://assets/Thief/Thief_Run.png" id="2"]
-[ext_resource type="Texture2D" uid="uid://b52j6xsat18ff" path="res://assets/Thief/Thief_Attack.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://cwbyr1wssxoxb" path="res://assets/Enemies/Thief/Thief_Idle.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://cyfxg4i013xit" path="res://assets/Enemies/Thief/Thief_Run.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://b52j6xsat18ff" path="res://assets/Enemies/Thief/Thief_Attack.png" id="3"]
 
 [sub_resource type="AtlasTexture" id="attack_0"]
 atlas = ExtResource("3")
